@@ -22,6 +22,10 @@ class Brick:
     -------
     draw(screen)
         Dessine la brique sur l'écran
+    hit()
+        Réduit le nombre de coups restants avant destruction de la brique
+    hit(damage)
+        Réduit le nombre de coups restants avant destruction de la brique en fonction des dégâts infligés
     """
 
     def __init__(self, x, y, width, height, color, life):
@@ -60,3 +64,24 @@ class Brick:
         if self.is_active:
             pygame.draw.rect(screen, self.color, self.rect)
             pygame.draw.rect(screen, (0, 0, 0), self.rect, 1)  # Bordure noire
+        
+    def hit(self):
+        """
+        Réduit le nombre de coups restants avant destruction de la brique
+        """
+        self.life -= 1
+        if self.life == 0:
+            self.is_active = False
+    
+    def hit(self, damage):
+        """
+        Réduit le nombre de coups restants avant destruction de la brique
+
+        Paramètres
+        ----------
+        damage : int
+            nombre de coups à retirer à la brique
+        """
+        self.life -= damage
+        if self.life <= 0:
+            self.is_active = False
