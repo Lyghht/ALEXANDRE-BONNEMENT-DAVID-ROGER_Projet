@@ -1,7 +1,11 @@
 import pygame
 #Classe permettant de générer la balle
 class Ball:
-    #Constructeur de la classe
+    """
+    Permet de construire une balle
+    @param self : Objet de la classe
+    @param config : Configuration du jeux
+    """
     def __init__(self, config):
         self.radius = 10 #Taille de la balle
         self.x = config.screenWidth // 2 #Position de la balle initial en x
@@ -15,7 +19,10 @@ class Ball:
         self.color = config.colors["ball"]
         self.config = config
 
-    #Méthode permettant de mettre à jour la position de la balle
+    """
+        Méthode permettant de mettre à jour la position de la balle
+        @param self : Objet de la classe
+    """
     def update(self):
         #Déplacement de la balle
         self.x += self.dx
@@ -27,6 +34,10 @@ class Ball:
         if self.y <= 0:
             self.dy = -self.dy
 
-    #Permet de dessiner la balle sur l'écran avec la couleur, la position et la taille définie
+    """
+        Permet de dessiner la balle sur l'écran avec la couleur, la position et la taille définie
+        @param self : Objet de la classe
+        @param screen : Ecran du jeu
+    """
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
