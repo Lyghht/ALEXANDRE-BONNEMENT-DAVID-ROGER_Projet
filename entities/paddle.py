@@ -2,6 +2,13 @@
 import pygame
 
 class Paddle:
+    """
+    
+    Classe représentant la barre de jeu
+    @param config: Configuration du jeu
+    @param self : Barre de jeu
+
+    """
     def __init__(self, config): #Initialisation de la barre
         self.width = 100 #Largeur de la barre
         self.height = 20 #Hauteur de la barre
