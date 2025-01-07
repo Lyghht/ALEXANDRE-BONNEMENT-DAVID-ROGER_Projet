@@ -15,16 +15,16 @@ def loadLevel(config, level_file):
         data = json.load(file) #Chargement du fichier JSON dans data
 
     # Calculer la largeur des briques en fonction du nombre de colonnes sur la grille
-    num_columns = len(data["layout"][0])
-    brick_width = config.screen_width // num_columns #Division entière pour obtenir la largeur des briques
-    brick_height = 20
+    numColumns = len(data["layout"][0])
+    brickWidth = config.screenWidth // numColumns #Division entière pour obtenir la largeur des briques
+    brickHeight = 20
 
-    for row_index, row in enumerate(data["layout"]): #Parcours de chaque ligne de la grille
-        for col_index, cell in enumerate(row): #Parcours de chaque colonne de la grille
+    for rowIndex, row in enumerate(data["layout"]): #Parcours de chaque ligne de la grille
+        for colIndex, cell in enumerate(row): #Parcours de chaque colonne de la grille
             if cell == 1:  # 1 représente une brique dans la grille (du json)
-                x = col_index * brick_width
-                y = row_index * brick_height
+                x = colIndex * brickWidth
+                y = rowIndex * brickHeight
                 color = config.colors["brick"] #Couleur des briques (à voir si on change en fonction de la dureté plus tard)
-                bricks.append(Brick(x, y, brick_width, brick_height, color)) #Ajout de la brique à la liste de briques
+                bricks.append(Brick(x, y, brickWidth, brickHeight, color, 1)) #Ajout de la brique à la liste de briques
 
     return bricks
