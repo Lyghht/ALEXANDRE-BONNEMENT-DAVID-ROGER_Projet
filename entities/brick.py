@@ -15,7 +15,7 @@ class Brick:
         couleur de la brique
     life : int
         nombre de coups restants avant destruction
-    is_active : bool
+    isActive : bool
         indique si la brique est active ou non
 
     Méthodes
@@ -50,7 +50,7 @@ class Brick:
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
         self.life = life
-        self.is_active = True
+        self.isActive = True
 
     def draw(self, screen):
         """
@@ -61,7 +61,7 @@ class Brick:
         screen : pygame.Surface
             écran sur lequel dessiner la brique
         """
-        if self.is_active:
+        if self.isActive:
             pygame.draw.rect(screen, self.color, self.rect)
             pygame.draw.rect(screen, (0, 0, 0), self.rect, 1)  # Bordure noire
         
@@ -71,7 +71,7 @@ class Brick:
         """
         self.life -= 1
         if self.life == 0:
-            self.is_active = False
+            self.isActive = False
     
     def hit(self, damage):
         """
@@ -84,4 +84,4 @@ class Brick:
         """
         self.life -= damage
         if self.life <= 0:
-            self.is_active = False
+            self.isActive = False

@@ -8,7 +8,7 @@ Fonction permettant de charger un niveau depuis un fichier JSON
 @param level_file: Fichier JSON contenant les informations du niveau
 @return: Liste de briques
 """
-def load_level(config, level_file):
+def loadLevel(config, level_file):
     bricks = [] #Permet de créer une liste de bricks vide, c'est elle qui va contenir les briques du niveau
 
     with open(level_file, "r") as file: #Ouverture du fichier JSON
