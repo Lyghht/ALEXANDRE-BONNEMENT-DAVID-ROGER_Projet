@@ -3,6 +3,7 @@ class Config:
         self.screenWidth = 800
         self.screenHeight = 600
         self.bgColor = (0, 0, 0)  # Noir
+        self.bgColorMenu = (119, 181, 254) # Bleu clair
         self.fps = 60
         self.paddleSpeed = 5
         self.ballSpeed = 4

@@ -2,6 +2,7 @@ import pygame
 from entities.paddle import Paddle
 from entities.ball import Ball
 from levels.levelLoader import loadLevel
+from ui.menu import Menu
 
 # Classe représentant le jeu
 class Game:
@@ -17,6 +18,9 @@ class Game:
         pygame.display.set_caption("Casse-Brique")
         self.clock = pygame.time.Clock()
 
+        # Initialise le menu
+        self.menu = Menu(config)
+
         # Initialise les entités du jeu
         self.paddle = Paddle(config)
         self.ball = Ball(config)
@@ -27,6 +31,14 @@ class Game:
     @param self: Objet de la classe
     """
     def run(self):
+        """
+        Permet de lancer le jeu
+        """
+        # Affiche d'abord le menu
+        if not self.show_menu():
+            pygame.quit()
+            return  # Quitte si l'utilisateur sélectionne "Quitter"
+
         # Boucle principale du jeu
         running = True
         while running:
@@ -34,7 +46,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
-            # Met à jours les éléments du jeu
+            # Met à jour les éléments du jeu
             self.update()
 
             # Affiche les éléments du jeu
@@ -44,6 +56,28 @@ class Game:
             self.clock.tick(self.config.fps)
 
         pygame.quit()
+    
+    def show_menu(self):
+        """
+        Affiche le menu principal
+        @return: True si le joueur veut jouer, False s'il veut quitter
+        """
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return False  # Quitter le jeu
+
+                # Gère les interactions avec le menu
+                action = self.menu.handle_event(event)
+                if action == "play":
+                    return True  # Lancer le jeu
+                elif action == "quit":
+                    return False  # Quitter le jeu
+
+            # Dessine le menu
+            self.screen.fill(self.config.bgColorMenu) # Couleur de fond
+            self.menu.draw(self.screen)
+            pygame.display.flip()  # Rafraîchit l'écran
 
     """
     Permet de mettre à jour les éléments du jeu graphiquement
