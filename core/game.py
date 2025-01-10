@@ -3,6 +3,7 @@ from entities.paddle import Paddle
 from entities.ball import Ball
 from levels.levelLoader import loadLevel
 from ui.menu import Menu
+from core.lifeManager import lifeManager
 
 # Classe représentant le jeu
 class Game:
@@ -25,6 +26,7 @@ class Game:
         self.paddle = Paddle(config)
         self.ball = Ball(config)
         self.bricks = loadLevel(config, "levels/level1.json")
+        self.gameLife = lifeManager(config.initialLife)
 
     """
     Permet de lancer le jeu
@@ -121,3 +123,10 @@ class Game:
                 brick.isActive = False
                 self.ball.dy = -self.ball.dy
                 break
+        
+        #Regarde la collision avec le bord bas de l'écran
+        if self.ball.y >= self.config.screenHeight:
+            if self.gameLife.loseLife(): #Si le joueur a encore des vies
+                self.ball.reset()
+            else: #Sinon la partie est perdue
+                self.show_menu() #A revoir après
