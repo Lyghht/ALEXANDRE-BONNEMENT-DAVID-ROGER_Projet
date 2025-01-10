@@ -7,6 +7,9 @@ from core.lifeManager import lifeManager
 
 # Classe représentant le jeu
 class Game:
+    #Permet de savoir si le joueur est en train de jouer ou pas
+    estEntrainDeJouer = False
+
     """
     Représente le jeu
     @param self: Objet de la classe
@@ -88,6 +91,9 @@ class Game:
     def update(self):
         keys = pygame.key.get_pressed()
         self.paddle.update(keys) # Met à jour la position du paddle
+        if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.estEntrainDeJouer:
+            self.ball.launchBall()
+            self.estEntrainDeJouer = True
         self.ball.update() # Met à jour la position de la balle
         self.check_collisions() # Vérifie les collisions
 
@@ -127,6 +133,8 @@ class Game:
         #Regarde la collision avec le bord bas de l'écran
         if self.ball.y >= self.config.screenHeight:
             if self.gameLife.loseLife(): #Si le joueur a encore des vies
-                self.ball.reset()
+                self.ball.resetPlace()
+                self.paddle.reset()
+                self.estEntrainDeJouer = False
             else: #Sinon la partie est perdue
                 self.show_menu() #A revoir après
