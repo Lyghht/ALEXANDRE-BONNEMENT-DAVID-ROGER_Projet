@@ -40,7 +40,7 @@ class Game:
         Permet de lancer le jeu
         """
         # Affiche d'abord le menu
-        if not self.show_menu():
+        if not self.showMenu():
             pygame.quit()
             return  # Quitte si l'utilisateur sélectionne "Quitter"
 
@@ -62,7 +62,7 @@ class Game:
 
         pygame.quit()
     
-    def show_menu(self):
+    def showMenu(self):
         """
         Affiche le menu principal
         @return: True si le joueur veut jouer, False s'il veut quitter
@@ -95,7 +95,7 @@ class Game:
             self.ball.launchBall()
             self.estEntrainDeJouer = True
         self.ball.update() # Met à jour la position de la balle
-        self.check_collisions() # Vérifie les collisions
+        self.checkCollisions() # Vérifie les collisions
 
     """
     Permet d'afficher les éléments du jeu
@@ -118,7 +118,7 @@ class Game:
     Permet de vérifier les collisions entre les éléments du jeu
     @param self: Objet de la classe
     """
-    def check_collisions(self):
+    def checkCollisions(self):
         # Collision balle-paddle
         if self.ball.y + self.ball.radius >= self.paddle.y and self.paddle.x <= self.ball.x <= self.paddle.x + self.paddle.width:
             self.ball.dy = -self.ball.dy
@@ -136,25 +136,25 @@ class Game:
                 self.ball.resetPlace()
                 self.paddle.reset()
                 self.estEntrainDeJouer = False
-                self.show_countdown()
+                self.showCountdown()
             else: #Sinon la partie est perdue
-                self.show_menu() #A revoir après
+                self.showMenu() #A revoir après
 
 
     """
     Affiche un décompte avant de relancer le jeu.
     @param duration: Durée du décompte en secondes
     """
-    def show_countdown(self, duration=3):
+    def showCountdown(self, duration=3):
         font = pygame.font.Font(None, 100)  # Police et taille du texte
-        start_time = pygame.time.get_ticks() 
+        startTime = pygame.time.get_ticks() 
 
         while True:
-            elapsed_time = (pygame.time.get_ticks() - start_time) / 1000  # Temps écoulé en secondes
-            remaining_time = duration - int(elapsed_time)  # Temps restant arrondi
+            elapsedTime = (pygame.time.get_ticks() - startTime) / 1000  # Temps écoulé en secondes
+            remainingTime = duration - int(elapsedTime)  # Temps restant arrondi
 
             # Si le décompte est terminé, on sort de la boucle
-            if remaining_time <= 0:
+            if remainingTime <= 0:
                 break
 
             # Gestion des événements (pour éviter que le jeu semble figé)
@@ -164,12 +164,12 @@ class Game:
                     exit()
 
             # Afficher le décompte
-            countdown_text = font.render(str(remaining_time), True, (255, 255, 255))  # Texte en blanc
-            text_rect = countdown_text.get_rect(center=(self.config.screenWidth // 2, self.config.screenHeight // 2))
+            countdownText = font.render(str(remainingTime), True, (255, 255, 255))  # Texte en blanc
+            textRect = countdownText.get_rect(center=(self.config.screenWidth // 2, self.config.screenHeight // 2))
 
             #Met un carré noir dérrière le texte pour éviter de voir les anciennes valeurs
-            pygame.draw.rect(self.screen, (0, 0, 0), (text_rect.x - 10, text_rect.y - 10, text_rect.width + 20, text_rect.height + 20))
-            self.screen.blit(countdown_text, text_rect) #Affiche le texte
+            pygame.draw.rect(self.screen, (0, 0, 0), (textRect.x - 10, textRect.y - 10, textRect.width + 20, textRect.height + 20))
+            self.screen.blit(countdownText, textRect) #Affiche le texte
 
             # Rafraîchir l'écran
             pygame.display.flip()
