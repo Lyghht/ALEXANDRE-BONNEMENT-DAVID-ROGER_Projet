@@ -7,6 +7,7 @@ from core.lifeManager import lifeManager
 from ui.gameOver import GameOverMenu
 from enum import Enum
 from core.utils import Utils
+from ui.renderer import Renderer
 
 class GameState(Enum):
     """
@@ -29,7 +30,6 @@ class GameState(Enum):
 
 # Classe représentant le jeu
 class Game:
-
     """
     Représente le jeu
     @param self: Objet de la classe
@@ -65,7 +65,7 @@ class Game:
         Score du joueur
     """
     def __init__(self, config):
-        # Initialiser Pygame
+        # Initialisation de Pygame et des éléments du jeu
         self.config = config
         self.screen = pygame.display.set_mode((config.screenWidth, config.screenHeight))
         pygame.display.set_caption("Casse-Brique")
@@ -85,9 +85,12 @@ class Game:
 
         # Variables de jeu
         self.estEntrainDeJouer = False
-        self.score = 0 # Score du joueur (A gérer par la suite avec une classe Score)
+        self.score = 0
 
         self.utils = Utils(self)
+
+        # Initialisation du renderer
+        self.renderer = Renderer(self)
 
     def run(self):
         """
@@ -99,7 +102,7 @@ class Game:
             # Gestion des événements, mise à jour et rendu
             self.handleEvents()
             self.update()
-            self.render()
+            self.renderer.render()
             self.clock.tick(self.config.fps)
         
         pygame.quit()
@@ -160,50 +163,10 @@ class Game:
         if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.estEntrainDeJouer:
             self.ball.launchBall()
             self.estEntrainDeJouer = True
+            
         self.ball.update() # Met à jour la position de la balle
         self.checkCollisions() # Vérifie les collisions
 
-    def render(self):
-        """
-        Affiche les éléments du jeu
-        """
-        if self.state == GameState.MENU:
-            self.renderMenu()
-        else:
-            self.renderGame()
-
-            # Affiche l'écran de fin de partie si le jeu est terminé par dessus le jeu
-            if self.state == GameState.GAME_OVER:
-                self.renderGameOver()
-
-        pygame.display.update()
-    
-    def renderMenu(self):
-        """
-        Affiche le menu principal
-        """
-        self.screen.fill(self.config.bgColorMenu)
-        self.menu.draw(self.screen)
-
-    def renderGame(self):
-        """
-        Affiche les éléments du jeu en cours de partie
-        """
-        self.screen.fill(self.config.bgColor)
-        self.paddle.draw(self.screen) # Affiche le paddle
-        self.ball.draw(self.screen) # Affiche la balle
-
-        # Affiche les briques
-        for brick in self.bricks:
-            brick.draw(self.screen)
-    
-    def renderGameOver(self):
-        """
-        Affiche l'écran de fin de partie
-        """
-        self.gameOverMenu.show(self.score) # Prépare l'affichage l'écran de fin de partie avec le score
-        self.gameOverMenu.draw(self.screen)
-    
     def checkCollisions(self):
         """
         Vérifie et gère toutes les collisions du jeu
@@ -211,7 +174,7 @@ class Game:
         """
         if self.checkPaddleCollision() or self.checkBrickCollisions():
             return True
-            
+        
         return self.handleBottomCollision()
 
     def checkPaddleCollision(self):
@@ -251,17 +214,3 @@ class Game:
                 self.state = GameState.GAME_OVER
                 return False
         return True
-
-    def renderCountdownFrame(self, font, remainingTime):
-        """
-        Affiche le décompte
-        @param font: Police du texte
-        @param remainingTime: Temps restant
-        """
-        countdownText = font.render(str(remainingTime), True, (255, 255, 255))
-        textRect = countdownText.get_rect(center=(self.config.screenWidth // 2, self.config.screenHeight // 2))
-
-        pygame.draw.rect(self.screen, (0, 0, 0), (textRect.x - 10, textRect.y - 10, textRect.width + 20, textRect.height + 20))
-        self.screen.blit(countdownText, textRect)
-
-        pygame.display.update()

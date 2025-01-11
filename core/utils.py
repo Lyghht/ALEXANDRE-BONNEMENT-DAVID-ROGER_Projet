@@ -63,4 +63,4 @@ class Utils:
                     return
 
             # Mise à jour de l'affichage
-            self.game.renderCountdownFrame(font, remainingTime)
+            self.game.renderer.renderCountdownFrame(font, remainingTime)
