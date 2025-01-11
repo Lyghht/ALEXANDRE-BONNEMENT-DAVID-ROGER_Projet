@@ -107,46 +107,6 @@ class Game:
         
         pygame.quit()
 
-    def handleEvents(self):
-        """
-        Gère les événements du jeu
-        """
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
-                return
-
-            if self.state == GameState.MENU:
-                self.handleMenuEvents(event)
-            elif self.state == GameState.GAME_OVER:
-                self.handleGameOverEvents(event)
-
-    def handleMenuEvents(self, event):
-        """
-        Gère les événements du menu principal
-        @param event: Événement Pygame
-        """
-        action = self.menu.handleEvent(event)
-        if action == "play":
-            self.state = GameState.PLAYING
-            self.utils.resetGame()
-        elif action == "quit":
-            self.running = False
-    
-    def handleGameOverEvents(self, event):
-        """
-        Gère les événements de l'écran de fin de partie
-        @param event: Événement Pygame
-        """
-        action = self.gameOverMenu.handleEvent(event)
-        if action == "retry":
-            self.gameOverMenu.hide() # Cache l'écran de fin de partie
-            self.state = GameState.PLAYING
-            self.utils.resetGame()
-        elif action == "menu":
-            self.gameOverMenu.hide() # Cache l'écran de fin de partie
-            self.state = GameState.MENU
-
     def update(self):
         """
         Met à jour les éléments du jeu
@@ -200,6 +160,46 @@ class Game:
                 self.score += 10
                 return True
         return False
+    
+    def handleEvents(self):
+        """
+        Gère les événements du jeu
+        """
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+                return
+
+            if self.state == GameState.MENU:
+                self.handleMenuEvents(event)
+            elif self.state == GameState.GAME_OVER:
+                self.handleGameOverEvents(event)
+
+    def handleMenuEvents(self, event):
+        """
+        Gère les événements du menu principal
+        @param event: Événement Pygame
+        """
+        action = self.menu.handleEvent(event)
+        if action == "play":
+            self.state = GameState.PLAYING
+            self.utils.resetGame()
+        elif action == "quit":
+            self.running = False
+    
+    def handleGameOverEvents(self, event):
+        """
+        Gère les événements de l'écran de fin de partie
+        @param event: Événement Pygame
+        """
+        action = self.gameOverMenu.handleEvent(event)
+        if action == "retry":
+            self.gameOverMenu.hide() # Cache l'écran de fin de partie
+            self.state = GameState.PLAYING
+            self.utils.resetGame()
+        elif action == "menu":
+            self.gameOverMenu.hide() # Cache l'écran de fin de partie
+            self.state = GameState.MENU
 
     def handleBottomCollision(self):
         """

@@ -59,7 +59,7 @@ class Utils:
             # Gestion des événements
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    self.game.running = False
                     return
 
             # Mise à jour de l'affichage
