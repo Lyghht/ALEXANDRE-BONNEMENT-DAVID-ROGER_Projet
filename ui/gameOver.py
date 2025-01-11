@@ -77,7 +77,7 @@ class GameOverMenu:
             Position verticale de base pour les boutons
         """
         # Bouton Rejouer
-        retry_text = self.font.render("Rejouer", True, (0, 0, 0))
+        retry_text = self.font.render("Rejouer", True, (100, 100, 100))
         retry_rect = retry_text.get_rect()
         button_rect = pygame.Rect(0, 0,
                                 retry_rect.width + self.padding[0] * 2,
@@ -93,7 +93,7 @@ class GameOverMenu:
         }
         
         # Bouton Menu
-        menu_text = self.font.render("Menu", True, (0, 0, 0))
+        menu_text = self.font.render("Menu", True, (100, 100, 100))
         menu_rect = menu_text.get_rect()
         button_rect = pygame.Rect(0, 0,
                                 menu_rect.width + self.padding[0] * 2,
@@ -194,12 +194,19 @@ class GameOverMenu:
             'menu' si le bouton menu est cliqué
             None sinon
         """
-        if not self.visible or event.type != pygame.MOUSEBUTTONDOWN:
-            return None
-            
-        if self.retry_button["rect"].collidepoint(event.pos):
-            return "retry"
-        elif self.menu_button["rect"].collidepoint(event.pos):
-            return "menu"
+        if self.visible and event.type == pygame.MOUSEBUTTONDOWN:  
+            if self.retry_button["rect"].collidepoint(event.pos):
+                return "retry"
+            elif self.menu_button["rect"].collidepoint(event.pos):
+                return "menu"
+        if self.visible and event.type == pygame.MOUSEMOTION:
+            if self.retry_button["rect"].collidepoint(event.pos):
+                self.retry_button["text"] = self.font.render("Rejouer", True, (0, 0, 0))
+            else:
+                self.retry_button["text"] = self.font.render("Rejouer", True, (100, 100, 100))
+            if self.menu_button["rect"].collidepoint(event.pos):
+                self.menu_button["text"] = self.font.render("Menu", True, (0, 0, 0))
+            else:
+                self.menu_button["text"] = self.font.render("Menu", True, (100, 100, 100))
         
         return None
