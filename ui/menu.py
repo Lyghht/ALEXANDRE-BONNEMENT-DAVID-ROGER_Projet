@@ -29,17 +29,19 @@ class Menu:
         """
         self.config = config
         self.font = pygame.font.Font(None, 36)
+        self.font_play = pygame.font.Font(None, 48)
+        self.font_title = pygame.font.Font(None, 72)
         self.padding = (20, 10)  # (padding_x, padding_y) pour le texte des boutons
 
         # Titre
-        self.title = self.font.render("Casse Brique", True, (255, 255, 255))
-        self.title_rect = self.title.get_rect(center=(config.screenWidth // 2, config.screenHeight // 2 - 50))
+        self.title = self.font_title.render("Casse Brique", True, (255, 255, 255))
+        self.title_rect = self.title.get_rect(center=(config.screenWidth // 2, 100))
 
         # Création des boutons avec padding
-        self.create_button("Jouer", config.screenHeight // 2 + 40)
-        self.create_button("Quitter", config.screenHeight // 2 + 100, is_quit=True)
+        self.createButton("Jouer", config.screenHeight // 2)
+        self.createButton("Quitter", config.screenHeight - 50, is_quit=True)
 
-    def create_button(self, text, y_pos, is_quit=False):
+    def createButton(self, text, y_pos, is_quit=False):
         """
         Crée un bouton avec le texte centré
 
@@ -53,7 +55,10 @@ class Menu:
             Indique si c'est le bouton quitter
         """
         # Création du texte
-        rendered_text = self.font.render(text, True, (100, 100, 100))
+        if is_quit:
+            rendered_text = self.font.render(text, True, (100, 100, 100))
+        else:
+            rendered_text = self.font_play.render(text, True, (100, 100, 100))
         text_rect = rendered_text.get_rect()
         
         # Création du rectangle du bouton avec padding
@@ -89,10 +94,10 @@ class Menu:
         screen.blit(self.title, self.title_rect)
 
         # Dessiner les boutons
-        self.draw_button(screen, self.play_rect, self.play, self.play_text_rect)
-        self.draw_button(screen, self.quit_rect, self.quit, self.quit_text_rect)
+        self.drawButton(screen, self.play_rect, self.play, self.play_text_rect)
+        self.drawButton(screen, self.quit_rect, self.quit, self.quit_text_rect)
 
-    def draw_button(self, screen, button_rect, text, text_rect):
+    def drawButton(self, screen, button_rect, text, text_rect):
         """
         Dessine un bouton avec son texte centré
 
@@ -111,7 +116,7 @@ class Menu:
         pygame.draw.rect(screen, (0, 0, 0), button_rect, 2, border_radius=10)
         screen.blit(text, text_rect)
 
-    def handle_event(self, event):
+    def handleEvent(self, event):
         """
         Gère les événements du menu
 
@@ -127,9 +132,9 @@ class Menu:
                 return "quit"
         if event.type == pygame.MOUSEMOTION:
             if self.play_rect.collidepoint(event.pos):
-                self.play = self.font.render("Jouer", True, (0, 0, 0))
+                self.play = self.font_play.render("Jouer", True, (0, 0, 0))
             else:
-                self.play = self.font.render("Jouer", True, (100, 100, 100))
+                self.play = self.font_play.render("Jouer", True, (100, 100, 100))
             if self.quit_rect.collidepoint(event.pos):
                 self.quit = self.font.render("Quitter", True, (0, 0, 0))
             else:

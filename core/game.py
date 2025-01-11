@@ -120,7 +120,7 @@ class Game:
         Gère les événements du menu principal
         @param event: Événement Pygame
         """
-        action = self.menu.handle_event(event)
+        action = self.menu.handleEvent(event)
         if action == "play":
             self.state = GameState.PLAYING
             self.resetGame()
@@ -173,7 +173,7 @@ class Game:
             if self.state == GameState.GAME_OVER:
                 self.renderGameOver()
 
-        pygame.display.flip()
+        pygame.display.update()
     
     def renderMenu(self):
         """
@@ -296,7 +296,7 @@ class Game:
         pygame.draw.rect(self.screen, (0, 0, 0), (textRect.x - 10, textRect.y - 10, textRect.width + 20, textRect.height + 20))
         self.screen.blit(countdownText, textRect)
 
-        pygame.display.flip()
+        pygame.display.update()
     
     def resetGame(self):
         """
