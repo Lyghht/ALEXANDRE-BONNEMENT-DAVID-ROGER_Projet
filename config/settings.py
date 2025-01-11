@@ -6,6 +6,7 @@ class Config:
         self.bgColorMenu = (119, 181, 254) # Bleu clair
         self.fps = 60
         self.paddleSpeed = 5
+        self.initialLife = 3
         self.ballSpeed = 4
         self.colors = {
             "brick": (255, 0, 0),  # Rouge
