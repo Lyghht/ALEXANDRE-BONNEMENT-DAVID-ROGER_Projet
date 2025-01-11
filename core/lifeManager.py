@@ -13,7 +13,7 @@ class lifeManager:
         return True
 
     # Méthode permettant de donner le nombre de vie
-    def get_lives(self):
+    def getLife(self):
         return self.life
 
     

@@ -6,6 +6,7 @@ from ui.menu import Menu
 from core.lifeManager import lifeManager
 from ui.gameOver import GameOverMenu
 from enum import Enum
+from core.utils import Utils
 
 class GameState(Enum):
     """
@@ -86,6 +87,8 @@ class Game:
         self.estEntrainDeJouer = False
         self.score = 0 # Score du joueur (A gérer par la suite avec une classe Score)
 
+        self.utils = Utils(self)
+
     def run(self):
         """
         Lance la boucle principale du jeu
@@ -123,7 +126,7 @@ class Game:
         action = self.menu.handle_event(event)
         if action == "play":
             self.state = GameState.PLAYING
-            self.resetGame()
+            self.utils.resetGame()
         elif action == "quit":
             self.running = False
     
@@ -136,7 +139,7 @@ class Game:
         if action == "retry":
             self.gameOverMenu.hide() # Cache l'écran de fin de partie
             self.state = GameState.PLAYING
-            self.resetGame()
+            self.utils.resetGame()
         elif action == "menu":
             self.gameOverMenu.hide() # Cache l'écran de fin de partie
             self.state = GameState.MENU
@@ -242,47 +245,12 @@ class Game:
         """
         if self.ball.y >= self.config.screenHeight:
             if self.gameLife.loseLife():
-                self.resetRound()
+                self.utils.resetRound()
                 return True
             else:
                 self.state = GameState.GAME_OVER
                 return False
         return True
-    
-    def resetRound(self):
-        """
-        Réinitialise la partie après une perte de vie
-        """
-        self.ball.resetPlace()
-        self.paddle.reset()
-        self.estEntrainDeJouer = False
-        self.showCountdown()
-
-    def showCountdown(self, duration=3):
-        """
-        Affiche un décompte avant de relancer le jeu
-        @param duration: Durée du décompte en secondes
-        """
-        font = pygame.font.Font(None, 100) # Police et taille du texte
-        startTime = pygame.time.get_ticks()
-
-        while True:
-            currentTime = pygame.time.get_ticks()
-            elapsedTime = (currentTime - startTime) / 1000 # Temps écoulé en secondes
-            remainingTime = duration - int(elapsedTime) # Temps restant arrondi
-
-            # Si le décompte est terminé, on sort de la boucle
-            if remainingTime <= 0:
-                break
-
-            # Gestion des événements
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                    return
-
-            # Mise à jour de l'affichage
-            self.renderCountdownFrame(font, remainingTime)
 
     def renderCountdownFrame(self, font, remainingTime):
         """
@@ -297,14 +265,3 @@ class Game:
         self.screen.blit(countdownText, textRect)
 
         pygame.display.flip()
-    
-    def resetGame(self):
-        """
-        Réinitialise le jeu pour une nouvelle partie
-        """
-        self.estEntrainDeJouer = False
-        self.score = 0
-        self.ball.resetPlace()
-        self.paddle.reset()
-        self.bricks = loadLevel(self.config, "levels/level1.json")
-        self.gameLife = lifeManager(self.config.initialLife)
