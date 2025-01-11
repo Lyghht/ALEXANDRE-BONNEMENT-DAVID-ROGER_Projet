@@ -160,10 +160,10 @@ class GameOverMenu:
         screen.blit(self.score_text, self.score_rect)
         
         # Boutons
-        self.draw_button(screen, self.retry_button)
-        self.draw_button(screen, self.menu_button)
+        self.drawButton(screen, self.retry_button)
+        self.drawButton(screen, self.menu_button)
 
-    def draw_button(self, screen, button):
+    def drawButton(self, screen, button):
         """
         Dessine un bouton
 
@@ -178,7 +178,7 @@ class GameOverMenu:
         pygame.draw.rect(screen, (0, 0, 0), button["rect"], 2, border_radius=10)
         screen.blit(button["text"], button["text_rect"])
 
-    def handle_event(self, event):
+    def handleEvent(self, event):
         """
         Gère les événements de la modale
 

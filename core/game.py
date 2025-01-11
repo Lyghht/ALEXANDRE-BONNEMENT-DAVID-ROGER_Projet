@@ -132,7 +132,7 @@ class Game:
         Gère les événements de l'écran de fin de partie
         @param event: Événement Pygame
         """
-        action = self.gameOverMenu.handle_event(event)
+        action = self.gameOverMenu.handleEvent(event)
         if action == "retry":
             self.gameOverMenu.hide() # Cache l'écran de fin de partie
             self.state = GameState.PLAYING
