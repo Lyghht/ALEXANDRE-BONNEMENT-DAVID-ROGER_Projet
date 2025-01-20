@@ -158,7 +158,7 @@ class Game:
         """
         for brick in self.bricks:
             if brick.isActive and brick.rect.collidepoint(self.ball.x, self.ball.y):
-                brick.isActive = False
+                brick.hit()
                 self.ball.dy = -self.ball.dy
                 self.score += 10
                 return True
