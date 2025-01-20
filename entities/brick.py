@@ -28,7 +28,7 @@ class Brick:
         Réduit le nombre de coups restants avant destruction de la brique en fonction des dégâts infligés
     """
 
-    def __init__(self, x, y, width, height, color, life):
+    def __init__(self, x, y, width, height, color, life, config):
         """
         Constructeur de la classe Brick
 
@@ -50,6 +50,7 @@ class Brick:
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
         self.life = life
+        self.config = config
         self.isActive = True
 
     def draw(self, screen):
@@ -70,6 +71,10 @@ class Brick:
         Réduit le nombre de coups restants avant destruction de la brique
         """
         self.life -= 1
+
+        self.color = self.config.colors["brick" + str(self.life)]
+
+
         if self.life == 0:
             self.isActive = False
     
@@ -83,5 +88,8 @@ class Brick:
             nombre de coups à retirer à la brique
         """
         self.life -= damage
+
+        self.color = self.config.colors["bricks" + str(self.life)]
+
         if self.life <= 0:
             self.isActive = False
