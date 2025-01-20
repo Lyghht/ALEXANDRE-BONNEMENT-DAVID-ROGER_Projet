@@ -1,6 +1,7 @@
 import pygame
 from levels.levelLoader import loadLevel
 from core.lifeManager import lifeManager
+from levels import levelGenerator
 
 """
 Classe utilitaire pour le jeu
@@ -33,7 +34,8 @@ class Utils:
         self.game.paddle.reset()
 
         # On recharge les briques
-        self.game.bricks = loadLevel(self.game.config, "levels/level1.json")
+        layout = levelGenerator.generateLevels()
+        self.game.bricks = loadLevel(self.game.config, layout)
         self.game.gameLife = lifeManager(self.game.config.initialLife)
 
 
