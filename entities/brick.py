@@ -65,20 +65,8 @@ class Brick:
         if self.isActive:
             pygame.draw.rect(screen, self.color, self.rect)
             pygame.draw.rect(screen, (0, 0, 0), self.rect, 1)  # Bordure noire
-        
-    def hit(self):
-        """
-        Réduit le nombre de coups restants avant destruction de la brique
-        """
-        self.life -= 1
-
-        self.color = self.config.colors["brick" + str(self.life)]
-
-
-        if self.life == 0:
-            self.isActive = False
     
-    def hit(self, damage):
+    def hit(self, damage=1):
         """
         Réduit le nombre de coups restants avant destruction de la brique
 
@@ -89,7 +77,7 @@ class Brick:
         """
         self.life -= damage
 
-        self.color = self.config.colors["bricks" + str(self.life)]
-
         if self.life <= 0:
             self.isActive = False
+        else:
+            self.color = self.config.colors["brick" + str(self.life)]
