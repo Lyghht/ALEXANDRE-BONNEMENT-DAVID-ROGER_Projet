@@ -8,6 +8,7 @@ from ui.gameOver import GameOverMenu
 from enum import Enum
 from core.utils import Utils
 from ui.renderer import Renderer
+from levels import levelGenerator
 
 class GameState(Enum):
     """
@@ -27,6 +28,7 @@ class GameState(Enum):
     MENU = 1
     PLAYING = 2
     GAME_OVER = 3
+
 
 # Classe représentant le jeu
 class Game:
@@ -80,7 +82,8 @@ class Game:
         self.gameOverMenu = GameOverMenu(config)
         self.paddle = Paddle(config)
         self.ball = Ball(config)
-        self.bricks = loadLevel(config, "levels/level1.json")
+        layout = levelGenerator.generateLevels()
+        self.bricks = loadLevel(config, layout)
         self.gameLife = lifeManager(config.initialLife)
 
         # Variables de jeu
@@ -104,7 +107,7 @@ class Game:
             self.update()
             self.renderer.render()
             self.clock.tick(self.config.fps)
-        
+
         pygame.quit()
 
     def update(self):
@@ -113,7 +116,7 @@ class Game:
         """
         if self.state == GameState.PLAYING:
             self.updateGame()
-            
+
     def updateGame(self):
         """
         Met à jour les éléments du jeu en cours de partie
@@ -123,7 +126,7 @@ class Game:
         if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.estEntrainDeJouer:
             self.ball.launchBall()
             self.estEntrainDeJouer = True
-            
+
         self.ball.update() # Met à jour la position de la balle
         self.checkCollisions() # Vérifie les collisions
 
@@ -134,7 +137,7 @@ class Game:
         """
         if self.checkPaddleCollision() or self.checkBrickCollisions():
             return True
-        
+
         return self.handleBottomCollision()
 
     def checkPaddleCollision(self):
@@ -142,12 +145,12 @@ class Game:
         Vérifie la collision entre la balle et le paddle
         @return: True si collision détectée
         """
-        if (self.ball.y + self.ball.radius >= self.paddle.y and 
+        if (self.ball.y + self.ball.radius >= self.paddle.y and
             self.paddle.x <= self.ball.x <= self.paddle.x + self.paddle.width):
             self.ball.dy = -self.ball.dy
             return True
         return False
-    
+
     def checkBrickCollisions(self):
         """
         Vérifie la collision entre la balle et les briques
@@ -160,7 +163,7 @@ class Game:
                 self.score += 10
                 return True
         return False
-    
+
     def handleEvents(self):
         """
         Gère les événements du jeu
@@ -186,7 +189,7 @@ class Game:
             self.utils.resetGame()
         elif action == "quit":
             self.running = False
-    
+
     def handleGameOverEvents(self, event):
         """
         Gère les événements de l'écran de fin de partie
