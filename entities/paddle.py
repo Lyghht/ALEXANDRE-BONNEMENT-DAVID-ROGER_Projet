@@ -1,5 +1,6 @@
 # entities/paddle.py
 import pygame
+import threading
 
 class Paddle:
     """
@@ -29,3 +30,19 @@ class Paddle:
     def reset(self):
         self.x = (self.config.screenWidth - self.width) // 2
         self.y = self.config.screenHeight - 40
+
+    def doubleBarre(self):
+        def reset_width():
+            pygame.time.wait(15000)
+            self.width = self.width // 2
+
+        threading.Thread(target=reset_width).start()
+        self.width = self.width * 2
+
+    def semiBarre(self):
+        def reset_width():
+            pygame.time.wait(15000)
+            self.width = self.width * 2
+
+        threading.Thread(target=reset_width).start()
+        self.width = self.width // 2

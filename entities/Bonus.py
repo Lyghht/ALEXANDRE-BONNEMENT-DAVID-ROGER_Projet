@@ -13,7 +13,7 @@ class Bonus:
 
     def apply(self, game):
         if self.bonus_type == "doubleBar":
-            game.paddle.expand()
+            game.paddle.doubleBarre()
         elif self.bonus_type == "triple_ball":
             game.addBalls(3)
         elif self.bonus_type == "slow_ball":
