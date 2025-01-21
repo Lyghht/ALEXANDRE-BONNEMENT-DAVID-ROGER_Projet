@@ -1,4 +1,5 @@
 import pygame
+import math
 from entities.paddle import Paddle
 from entities.ball import Ball
 from levels.levelLoader import loadLevel
@@ -148,8 +149,7 @@ class Game:
         Vérifie la collision entre la balle et le paddle
         @return: True si collision détectée
         """
-        if (self.ball.y + self.ball.radius >= self.paddle.y and
-            self.paddle.x <= self.ball.x <= self.paddle.x + self.paddle.width):
+        if self.utils.circleRectCollision(self.paddle.rect):
             self.ball.dy = -self.ball.dy
             return True
         return False
@@ -160,7 +160,7 @@ class Game:
         @return: True si collision détectée
         """
         for brick in self.bricks:
-            if brick.isActive and brick.rect.collidepoint(self.ball.x, self.ball.y):
+            if brick.isActive and self.utils.circleRectCollision(brick.rect):
                 brick.hit()
                 self.ball.dy = -self.ball.dy
                 self.score += 10

@@ -16,6 +16,7 @@ class Paddle:
         self.speed = config.paddleSpeed #Vitesse de la barre
         self.config = config #Configuration du jeu
         self.reset()
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
     def update(self, keys): # Deplacement de la barre
         if keys[pygame.K_LEFT] and self.x > 0:
@@ -24,7 +25,8 @@ class Paddle:
             self.x += self.speed # Déplacement de la barre à droite
 
     def draw(self, screen): # Affichage de la barre
-        pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        pygame.draw.rect(screen, self.color, self.rect)
 
     def reset(self):
         self.x = (self.config.screenWidth - self.width) // 2
