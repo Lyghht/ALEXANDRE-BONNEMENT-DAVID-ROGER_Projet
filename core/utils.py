@@ -38,6 +38,9 @@ class Utils:
         layout = levelGenerator.generateLevels()
         self.game.bricks = loadLevel(self.game.config, layout)
         self.game.gameLife = lifeManager(self.game.config.initialLife)
+        
+        # On recharge l'hud
+        self.game.hud.reset(self.game.score, self.game.level)
 
     def circleRectCollision(self, rectangle):
         """
@@ -52,7 +55,7 @@ class Utils:
         
         #Permet de calculer la distance
         distance = math.sqrt((ball.x - closestX) ** 2 + (ball.y - closestY) ** 2)
-
+        
         return distance < ball.radius + 2 #On ajoute 2 pour corriger un bug de collision
 
     #Permet d'afficher un compte à rebours

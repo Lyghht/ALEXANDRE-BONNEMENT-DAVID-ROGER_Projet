@@ -2,6 +2,7 @@ class Config:
     def __init__(self):
         self.screenWidth = 800
         self.screenHeight = 600
+        self.screenHudHeight = 50
         self.bgColor = (0, 0, 0)  # Noir
         self.bgColorMenu = (119, 181, 254) # Bleu clair
         self.fps = 60

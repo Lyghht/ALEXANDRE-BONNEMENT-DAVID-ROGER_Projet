@@ -6,6 +6,7 @@ from levels.levelLoader import loadLevel
 from ui.menu import Menu
 from core.lifeManager import lifeManager
 from ui.gameOver import GameOverMenu
+from ui.hud import HUD
 from enum import Enum
 from core.utils import Utils
 from ui.renderer import Renderer
@@ -78,18 +79,20 @@ class Game:
         self.state = GameState.MENU
         self.running = True
 
+        # Variables de jeu
+        self.estEntrainDeJouer = False
+        self.score = 0
+        self.level = 1
+        
         # Initialisation des éléments du jeu
         self.menu = Menu(config)
+        self.hud = HUD(config, self.score, 1)
         self.gameOverMenu = GameOverMenu(config)
         self.paddle = Paddle(config)
         self.ball = Ball(config)
         layout = levelGenerator.generateLevels()
         self.bricks = loadLevel(config, layout)
         self.gameLife = lifeManager(config.initialLife)
-
-        # Variables de jeu
-        self.estEntrainDeJouer = False
-        self.score = 0
 
         self.utils = Utils(self)
 
@@ -161,6 +164,7 @@ class Game:
                 brick.hit()
                 self.ball.dy = -self.ball.dy
                 self.score += 10
+                self.hud.updateScore(self.score)
                 return True
         return False
 
@@ -211,9 +215,11 @@ class Game:
         """
         if self.ball.y >= self.config.screenHeight:
             if self.gameLife.loseLife():
+                self.hud.updateLives(self.gameLife.getLife())
                 self.utils.resetRound()
                 return True
             else:
+                self.hud.updateLives(self.gameLife.getLife())
                 self.state = GameState.GAME_OVER
                 return False
         return True
