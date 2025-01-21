@@ -1,4 +1,5 @@
 import pygame
+import math
 from levels.levelLoader import loadLevel
 from core.lifeManager import lifeManager
 from levels import levelGenerator
@@ -38,7 +39,21 @@ class Utils:
         self.game.bricks = loadLevel(self.game.config, layout)
         self.game.gameLife = lifeManager(self.game.config.initialLife)
 
+    def circleRectCollision(self, rectangle):
+        """
+        Vérifie la collision entre un cercle et un rectangle
+        @param circle: Cercle
+        @param rectangle: Rectangle
+        @return: True si collision détectée
+        """
+        ball = self.game.ball
+        closestX = max(rectangle.left, min(ball.x, rectangle.right))
+        closestY = max(rectangle.top, min(ball.y, rectangle.bottom))
+        
+        #Permet de calculer la distance
+        distance = math.sqrt((ball.x - closestX) ** 2 + (ball.y - closestY) ** 2)
 
+        return distance < ball.radius + 2 #On ajoute 2 pour corriger un bug de collision
 
     #Permet d'afficher un compte à rebours
     def showCountdown(self, duration=3):
