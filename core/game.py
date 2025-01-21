@@ -213,7 +213,7 @@ class Game:
         Gère la collision avec le bord bas de l'écran
         @return: True si le jeu continue, False si game over
         """
-        if self.ball.y >= self.config.screenHeight:
+        if self.ball.y + 15 >= self.config.screenHeight:
             if self.gameLife.loseLife():
                 self.hud.updateLives(self.gameLife.getLife())
                 self.utils.resetRound()
