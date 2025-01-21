@@ -23,7 +23,7 @@ class Ball:
         self.y += self.dy
 
         # Collision avec les bords de l'écran
-        if self.x <= 0 or self.x >= self.config.screenWidth:
+        if self.x - self.radius <= 0 or self.x + self.radius >= self.config.screenWidth:
             self.dx = -self.dx
         if self.y <= 0:
             self.dy = -self.dy
