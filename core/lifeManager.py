@@ -11,6 +11,10 @@ class lifeManager:
         if self.life <= 0:
             return False
         return True
+    
+    # Méthode permettant d'ajouter une vie
+    def addLife(self, number=1):
+        self.life += number
 
     # Méthode permettant de donner le nombre de vie
     def getLife(self):

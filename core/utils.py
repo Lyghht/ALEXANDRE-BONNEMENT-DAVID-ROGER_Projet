@@ -29,18 +29,49 @@ class Utils:
         #Reset des variables de jeu
         self.game.estEntrainDeJouer = False
         self.game.score = 0
+        self.game.level = 1
 
         # On remet la balle et le paddle à leur place initiale
         self.game.ball.resetPlace()
         self.game.paddle.reset()
 
         # On recharge les briques
-        layout = levelGenerator.generateLevels()
+        layout = levelGenerator.generateLevels(self.game.level)
         self.game.bricks = loadLevel(self.game.config, layout)
         self.game.gameLife = lifeManager(self.game.config.initialLife)
         
         # On recharge l'hud
         self.game.hud.reset(self.game.score, self.game.level)
+    
+    def checkVictory(self):
+        """
+        Vérifie si le joueur a gagné
+        """
+        count = 0
+        # On compte le nombre de briques restantes
+        for brick in self.game.bricks:
+            if brick.life > 0:
+                count += 1
+        
+        # Si il n'y a plus de briques, on passe au niveau suivant
+        if count == 0:
+            # On incrémente le niveau
+            self.game.level += 1
+
+            # On met à jour l'hud
+            self.game.hud.updateLevel(self.game.level)
+            if self.game.gameLife.getLife() < self.game.config.initialLife:
+                self.game.gameLife.addLife()
+            self.game.hud.updateLives(self.game.gameLife.getLife())
+            
+            # On recharge les briques
+            layout = levelGenerator.generateLevels(self.game.level)
+            self.game.bricks = loadLevel(self.game.config, layout)
+
+            # On remet la balle et le paddle à leur place initiale
+            self.game.ball.resetPlace()
+            self.game.paddle.reset()
+            self.game.estEntrainDeJouer = False
 
     def circleRectCollision(self, rectangle):
         """
