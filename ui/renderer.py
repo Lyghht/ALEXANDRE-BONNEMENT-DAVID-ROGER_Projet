@@ -40,6 +40,7 @@ class Renderer:
         self.game.screen.fill(self.game.config.bgColor)
         self.game.paddle.draw(self.game.screen)  # Affiche le paddle
         self.game.ball.draw(self.game.screen)  # Affiche la balle
+        self.game.hud.draw(self.game.screen)
 
         # Affiche les briques
         for brick in self.game.bricks:

@@ -25,8 +25,9 @@ class Ball:
         # Collision avec les bords de l'écran
         if self.x <= 0 or self.x >= self.config.screenWidth:
             self.dx = -self.dx
-        if self.y <= 0:
+        if self.y - self.radius <= self.config.screenHudHeight:
             self.dy = -self.dy
+
 
     """
         Permet de dessiner la balle sur l'écran avec la couleur, la position et la taille définie

@@ -38,6 +38,9 @@ class Utils:
         self.game.bricks = loadLevel(self.game.config, layout)
         self.game.gameLife = lifeManager(self.game.config.initialLife)
 
+        # On recharge l'hud
+        self.game.hud.reset(self.game.score, self.game.level)
+
 
 
     #Permet d'afficher un compte à rebours
