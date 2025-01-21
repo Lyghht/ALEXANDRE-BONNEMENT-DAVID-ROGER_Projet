@@ -72,6 +72,7 @@ class Game:
         self.screen = pygame.display.set_mode((config.screenWidth, config.screenHeight))
         pygame.display.set_caption("Casse-Brique")
         self.clock = pygame.time.Clock()
+        self.bonuses = []
 
         # État du jeu
         self.state = GameState.MENU
@@ -129,13 +130,14 @@ class Game:
 
         self.ball.update() # Met à jour la position de la balle
         self.checkCollisions() # Vérifie les collisions
+        self.updateBonuses() # Met à jour les bonus
 
     def checkCollisions(self):
         """
         Vérifie et gère toutes les collisions du jeu
         @return: True si le jeu continue, False si game over
         """
-        if self.checkPaddleCollision() or self.checkBrickCollisions():
+        if self.checkPaddleCollision() or self.checkBrickCollisions() or self.checkBonusCollisions():
             return True
 
         return self.handleBottomCollision()
@@ -158,9 +160,22 @@ class Game:
         """
         for brick in self.bricks:
             if brick.isActive and brick.rect.collidepoint(self.ball.x, self.ball.y):
-                brick.hit()
+                brick.hit(self.bonuses)
                 self.ball.dy = -self.ball.dy
                 self.score += 10
+                return True
+        return False
+
+    def checkBonusCollisions(self):
+        """
+        Vérifie la collision entre les bonus et le paddle
+        @return: True si collision détectée
+        """
+        for bonus in self.bonuses:
+            if bonus.isActive and (bonus.rect.y + bonus.rect.height >= self.paddle.y and
+                                   self.paddle.x <= bonus.rect.x <= self.paddle.x + self.paddle.width):
+                bonus.apply(self)
+                bonus.isActive = False
                 return True
         return False
 
@@ -217,3 +232,13 @@ class Game:
                 self.state = GameState.GAME_OVER
                 return False
         return True
+
+    def updateBonuses(self):
+        """
+        Met à jour les bonus et vérifie les collisions avec le paddle
+        """
+        for bonus in self.bonuses:
+            if bonus.isActive:
+                bonus.rect.y += self.config.bonusSpeed
+                if bonus.rect.y > self.config.screenHeight:
+                    bonus.isActive = False

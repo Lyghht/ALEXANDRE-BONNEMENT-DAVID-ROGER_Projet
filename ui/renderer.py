@@ -45,6 +45,10 @@ class Renderer:
         for brick in self.game.bricks:
             brick.draw(self.game.screen)
 
+        # Affiche les bonus
+        for bonus in self.game.bonuses:
+            bonus.draw(self.game.screen)
+
 
     def renderGameOver(self):
         """

@@ -17,3 +17,5 @@ class Config:
             "paddle": (255, 255, 255),  # Blanc
             "ball": (0, 255, 0),  # Vert
         }
+        self.bonusProbability = 0.1
+        self.bonusSpeed = 2
