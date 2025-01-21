@@ -18,7 +18,7 @@ def loadLevel(config, layout):
         for colIndex, cell in enumerate(row): #Parcours de chaque colonne de la grille
             if cell > 0:  # 1 représente une brique dans la grille (du json)
                 x = colIndex * brickWidth
-                y = rowIndex * brickHeight
+                y = rowIndex * brickHeight + config.screenHudHeight
                 color = config.colors["brick" + str(cell)] #Couleur de la brique
                 bricks.append(Brick(x, y, brickWidth, brickHeight, color, cell, config)) #Ajout de la brique à la liste de briques
 
