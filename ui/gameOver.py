@@ -40,8 +40,8 @@ class GameOverMenu:
         self.score = 0
         
         # Polices
-        self.font = pygame.font.Font(None, 36)
-        self.font_title = pygame.font.Font(None, 72)
+        self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
+        self.font_title = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 30)
         
         # Dimensions de la modale
         modal_width = config.screenWidth // 2
@@ -82,7 +82,7 @@ class GameOverMenu:
         button_rect = pygame.Rect(0, 0,
                                 retry_rect.width + self.padding[0] * 2,
                                 retry_rect.height + self.padding[1] * 2)
-        button_rect.centerx = self.modal_rect.centerx - 80
+        button_rect.centerx = self.modal_rect.centerx
         button_rect.centery = base_y
         retry_rect.center = button_rect.center
         
@@ -98,8 +98,8 @@ class GameOverMenu:
         button_rect = pygame.Rect(0, 0,
                                 menu_rect.width + self.padding[0] * 2,
                                 menu_rect.height + self.padding[1] * 2)
-        button_rect.centerx = self.modal_rect.centerx + 80
-        button_rect.centery = base_y
+        button_rect.centerx = self.modal_rect.centerx
+        button_rect.centery = base_y + 50
         menu_rect.center = button_rect.center
         
         self.menu_button = {
@@ -119,7 +119,7 @@ class GameOverMenu:
         """
         self.visible = True
         self.score = score
-        self.score_text = self.font.render(f"Score: {score}", True, (255, 255, 255))
+        self.score_text = self.font.render(f"Score:{score}", True, (255, 255, 255))
         self.score_rect = self.score_text.get_rect(
             centerx=self.modal_rect.centerx,
             centery=self.modal_rect.centery - 20

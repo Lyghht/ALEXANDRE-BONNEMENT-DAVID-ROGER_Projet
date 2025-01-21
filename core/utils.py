@@ -64,7 +64,7 @@ class Utils:
         Affiche un décompte avant de relancer le jeu
         @param duration: Durée du décompte en secondes
         """
-        font = pygame.font.Font(None, 100) # Police et taille du texte
+        font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 40)
         startTime = pygame.time.get_ticks()
 
         while True:

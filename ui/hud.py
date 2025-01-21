@@ -30,15 +30,15 @@ class HUD:
             écran sur lequel dessiner l'interface utilisateur
         """
         # Score
-        scoreText = self.font.render(f"Score: {self.score}", True, (255, 255, 255))
+        scoreText = self.font.render(f"Score:{self.score}", True, (255, 255, 255))
         screen.blit(scoreText, (10, 10))
 
         # Niveau
-        levelText = self.font.render(f"Niveau: {self.level}", True, (255, 255, 255))
+        levelText = self.font.render(f"Niveau:{self.level}", True, (255, 255, 255))
         screen.blit(levelText, (self.config.screenWidth // 2 - levelText.get_width() // 2, 10))
 
         # Vies
-        livesText = self.font.render(f"Vies: {self.lives}", True, (255, 255, 255))
+        livesText = self.font.render(f"Vies:{self.lives}", True, (255, 255, 255))
         screen.blit(livesText, (self.config.screenWidth - 10 - livesText.get_width(), 10))
 
         # Ligne de séparation

@@ -28,10 +28,10 @@ class Menu:
         Constructeur de la classe Menu
         """
         self.config = config
-        self.font = pygame.font.Font(None, 36)
-        self.font_play = pygame.font.Font(None, 48)
-        self.font_title = pygame.font.Font(None, 72)
-        self.padding = (20, 10)  # (padding_x, padding_y) pour le texte des boutons
+        self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
+        self.font_play = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 30)
+        self.font_title = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 40)
+        self.padding = (20, 20)  # (padding_x, padding_y) pour le texte des boutons
 
         # Titre
         self.title = self.font_title.render("Casse Brique", True, (255, 255, 255))
@@ -39,7 +39,7 @@ class Menu:
 
         # Création des boutons avec padding
         self.createButton("Jouer", config.screenHeight // 2)
-        self.createButton("Quitter", config.screenHeight - 50, is_quit=True)
+        self.createButton("Quitter", config.screenHeight - 70, is_quit=True)
 
     def createButton(self, text, y_pos, is_quit=False):
         """
