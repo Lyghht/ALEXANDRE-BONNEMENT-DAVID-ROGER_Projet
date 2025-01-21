@@ -161,8 +161,8 @@ class Game:
         """
         for brick in self.bricks:
             if brick.isActive and self.utils.circleRectCollision(brick.rect):
-                brick.hit()
                 self.ball.dy = -self.ball.dy
+                brick.hit()                
                 self.score += 10
                 self.hud.updateScore(self.score)
                 return True
