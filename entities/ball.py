@@ -28,7 +28,6 @@ class Ball:
         if self.y - self.radius <= self.config.screenHudHeight:
             self.dy = -self.dy
 
-
     """
         Permet de dessiner la balle sur l'écran avec la couleur, la position et la taille définie
         @param self : Objet de la classe
