@@ -57,14 +57,19 @@ def generateLevels(level):
     difficulty = level * 0.1
 
     # Déterminer la taille de la grille en fonction du niveau
-    rows = 10
-    cols = 10
-    if level > 3:
-        rows = 12
-        cols = 15
-    if level > 5:
-        rows = 15
-        cols = 20
+    match level:
+        case 1 | 2 | 3:
+            rows = 10
+            cols = 10
+        case 4 | 5:
+            rows = 12
+            cols = 15
+        case _ if level > 5:
+            rows = 15
+            cols = 20
+        case _:
+            rows = 10
+            cols = 10
     symmetrical = True
     geometric = True
     return generateRandomLayout(rows, cols, difficulty, symmetrical=symmetrical, geometric=geometric)
