@@ -1,4 +1,5 @@
 import pygame
+import math
 import core.game as gameFile
 
 """
@@ -30,7 +31,19 @@ class Collisions:
         @return: True si collision détectée
         """
         if self.game.utils.circleRectCollision(self.game.paddle.rect):
-            self.game.ball.dy = -self.game.ball.dy
+            paddleCenter = self.game.paddle.x + self.game.paddle.width / 2
+            impactRelative = (self.game.ball.x - paddleCenter) / (self.game.paddle.width / 2) # Permet de calculer si l'angle est positif ou négatif
+            # Calcul de l'angle de rebond en radians pour la balle
+            angle = 90 - (impactRelative * self.game.config.bounceAngle)
+            angle = math.radians(angle)
+            
+            # Calcul de la vitesse de la balle
+            speed = math.sqrt(self.game.ball.dx ** 2 + self.game.ball.dy ** 2)
+
+            # Mise à jour de la vitesse de la balle
+            self.game.ball.dx = speed * math.cos(angle)
+            self.game.ball.dy = -speed * math.sin(angle)
+
             return True
         return False
 
