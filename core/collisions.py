@@ -1,4 +1,5 @@
 import pygame
+import math
 import core.game as gameFile
 
 """
@@ -30,7 +31,19 @@ class Collisions:
         @return: True si collision détectée
         """
         if self.game.utils.circleRectCollision(self.game.paddle.rect):
-            self.game.ball.dy = -self.game.ball.dy
+            paddleCenter = self.game.paddle.x + self.game.paddle.width / 2
+            impactRelative = (self.game.ball.x - paddleCenter) / (self.game.paddle.width / 2) # Permet de calculer si l'angle est positif ou négatif
+            # Calcul de l'angle de rebond en radians pour la balle
+            angle = 90 - (impactRelative * self.game.config.bounceAngle)
+            angle = math.radians(angle)
+            
+            # Calcul de la vitesse de la balle
+            speed = math.sqrt(self.game.ball.dx ** 2 + self.game.ball.dy ** 2)
+
+            # Mise à jour de la vitesse de la balle
+            self.game.ball.dx = speed * math.cos(angle)
+            self.game.ball.dy = -speed * math.sin(angle)
+
             return True
         return False
 
@@ -40,10 +53,11 @@ class Collisions:
         @return: True si collision détectée
         """
         for brick in self.game.bricks:
+            # Si la brique est active et qu'il y a collision
             if brick.isActive and self.game.utils.circleRectCollision(brick.rect):
-                self.game.ball.dy = -self.game.ball.dy
+                self.game.ball.dy = -self.game.ball.dy 
                 brick.hit()                
-                self.game.score += 10
+                self.game.score += 10 # Ajout de 10 points au score
                 self.game.hud.updateScore(self.game.score)
                 return True
         return False
@@ -53,13 +67,14 @@ class Collisions:
         Gère la collision avec le bord bas de l'écran
         @return: True si le jeu continue, False si game over
         """
+        # Si la balle touche le bas de l'écran
         if self.game.ball.y + 15 >= self.game.config.screenHeight:
-            if self.game.gameLife.loseLife():
+            if self.game.gameLife.loseLife(): # Si le joueur a encore des vies	
                 self.game.hud.updateLives(self.game.gameLife.getLife())
-                self.game.utils.resetRound()
+                self.game.utils.resetRound() # Réinitialisation de la balle et du paddle
                 return True
-            else:
+            else: # Si le joueur n'a plus de vie	
                 self.game.hud.updateLives(self.game.gameLife.getLife())
-                self.game.state = gameFile.GameState.GAME_OVER
+                self.game.state = gameFile.GameState.GAME_OVER # Passage à l'état de game over
                 return False
         return True
