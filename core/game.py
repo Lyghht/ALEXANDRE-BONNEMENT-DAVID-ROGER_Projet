@@ -130,10 +130,11 @@ class Game:
         Met à jour les éléments du jeu en cours de partie
         """
         keys = pygame.key.get_pressed()
-        self.paddle.update(keys) # Met à jour la position du paddle
         if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.estEntrainDeJouer:
             self.ball.launchBall()
+            self.collisions.checkCollisions()
             self.estEntrainDeJouer = True
+        self.paddle.update(keys) # Met à jour la position du paddle
 
         self.ball.update() # Met à jour la position de la balle
         self.collisions.checkCollisions() # Vérifie les collisions

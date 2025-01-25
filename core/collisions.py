@@ -32,12 +32,11 @@ class Collisions:
         """
         if self.game.utils.circleRectCollision(self.game.paddle.rect):
             paddleCenter = self.game.paddle.x + self.game.paddle.width / 2
-            impactRelative = (self.game.ball.x - paddleCenter) / (self.game.paddle.width) # Permet de calculer si l'angle est positif ou négatif
+            impactRelative = (self.game.ball.x - paddleCenter) / (self.game.paddle.width / 2) # Permet de calculer si l'angle est positif ou négatif
             # Calcul de l'angle de rebond en radians pour la balle
             angle = 90 - (impactRelative * self.game.config.bounceAngle)
             angle = math.radians(angle)
             
-            print("angle", angle)
             # Calcul de la vitesse de la balle
             speed = math.sqrt(self.game.ball.dx ** 2 + self.game.ball.dy ** 2)
 
@@ -56,6 +55,7 @@ class Collisions:
         for brick in self.game.bricks:
             # Si la brique est active et qu'il y a collision
             if brick.isActive and self.game.utils.circleRectCollision(brick.rect):
+                # Position de la brique
                 brickLeft = brick.rect.x
                 brickRight = brick.rect.x + brick.rect.width
                 brickTop = brick.rect.y
