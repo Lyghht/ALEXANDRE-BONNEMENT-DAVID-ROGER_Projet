@@ -7,7 +7,7 @@ class Config:
         self.bgColorMenu = (119, 181, 254) # Bleu clair
         self.fps = 60
         self.paddleSpeed = 8
-        self.bounceAngle = 40
+        self.bounceAngle = 80
         self.initialLife = 3
         self.ballSpeed = 5
         self.colors = {
