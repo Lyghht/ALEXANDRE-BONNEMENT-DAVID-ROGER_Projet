@@ -78,6 +78,8 @@ class Brick:
         self.life -= damage
 
         if self.life <= 0:
+            pygame.mixer.Sound(self.config.sounds["brickFall"]).play() # Son de destruction de brique
             self.isActive = False
         else:
             self.color = self.config.colors["brick" + str(self.life)]
+            pygame.mixer.Sound(self.config.sounds["brickHit"]).play() # Son de collision avec une brique

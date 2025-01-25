@@ -19,3 +19,10 @@ class Config:
             "paddle": (255, 255, 255),  # Blanc
             "ball": (0, 255, 0),  # Vert
         }
+        self.sounds = {
+            "brickHit": "assets/sounds/brickHit.wav",
+            "brickFall": "assets/sounds/brickFall.wav",
+        }
+        self.images = {
+            "ball": "assets/images/ball.png",
+        }

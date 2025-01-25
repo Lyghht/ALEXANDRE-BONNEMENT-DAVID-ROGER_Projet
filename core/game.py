@@ -136,7 +136,7 @@ class Game:
             self.isPlaying = True
         self.paddle.update(keys) # Met à jour la position du paddle
 
-        self.ball.update() # Met à jour la position de la balle
+        self.ball.update(self.isPlaying) # Met à jour la position de la balle
         self.utils.checkVictory() # Vérifie si le joueur a gagné
         self.collisions.checkCollisions() # Vérifie les collisions
 

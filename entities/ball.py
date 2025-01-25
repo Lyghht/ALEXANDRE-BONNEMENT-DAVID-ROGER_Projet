@@ -8,20 +8,42 @@ class Ball:
     """
     def __init__(self, config):
         self.radius = 10 #Taille de la balle
+        self.config = config
 
         #Couleur de la balle
         self.color = config.colors["ball"]
-        self.config = config
+
+        #Chargement de l'image de la balle
+        self.image_original = pygame.image.load(config.images["ball"])
+        new_size = (self.radius * 2, self.radius * 2)
+        self.image_original = pygame.transform.scale(self.image_original, new_size)
+
+        # Initialisation pour la rotation
+        self.image = self.image_original
+        self.angle = 0  # Angle de rotation initial
+        self.rotation_speed = 5  # Vitesse de rotation (en degrés/frame)
+
         self.resetPlace() #Initialisation de la balle
 
-    def update(self):
+    def update(self, isPlaying):
         """
         Méthode permettant de mettre à jour la position de la balle
         @param self : Objet de la classe
         """
+        # Si le jeu n'est pas en cours, on ne met pas à jour la balle
+        if not isPlaying:
+            return
+        
         #Déplacement de la balle
         self.x += self.dx
         self.y += self.dy
+
+        # Rotation de la balle
+        self.angle += self.rotation_speed
+        self.angle %= 360  # Assure que l'angle reste entre 0 et 359
+
+        # Met à jour l'image avec l'angle de rotation
+        self.image = pygame.transform.rotate(self.image_original, self.angle)
 
         # Collision avec les bords de l'écran
         if self.x - self.radius <= 0:  # Collision avec le bord gauche
@@ -41,7 +63,9 @@ class Ball:
         @param screen : Ecran du jeu
     """
     def draw(self, screen):
-        pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
+        # Calculer la position pour centrer l'image
+        rotated_rect = self.image.get_rect(center=(self.x, self.y))
+        screen.blit(self.image, rotated_rect.topleft)
 
     """
         Permet de réinitialiser la position de la balle
@@ -51,7 +75,9 @@ class Ball:
         self.x = self.config.screenWidth // 2 #Position de la balle initial en x
         self.y = self.config.screenHeight - 50 #Position de la balle initial en y
         self.dx = self.dy = 0 #Vitesse de la balle à 0 en début de jeu
-
+        self.angle = 0 #Angle de rotation de la balle à 0
+        self.image = self.image_original #Image de la balle
+        
 
     """
         Permet de lancer balle
