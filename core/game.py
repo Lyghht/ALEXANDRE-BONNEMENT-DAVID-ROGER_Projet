@@ -5,6 +5,7 @@ from entities.ball import Ball
 from levels.levelLoader import loadLevel
 from ui.menu import Menu
 from core.lifeManager import lifeManager
+from core.collisions import Collisions
 from ui.gameOver import GameOverMenu
 from ui.hud import HUD
 from enum import Enum
@@ -63,7 +64,7 @@ class Game:
         Liste des briques
     gameLife : lifeManager
         Gestionnaire de vies
-    estEntrainDeJouer : bool
+    isPlaying : bool
         Indique si la balle est en mouvement
     score : int
         Score du joueur
@@ -74,13 +75,16 @@ class Game:
         self.screen = pygame.display.set_mode((config.screenWidth, config.screenHeight))
         pygame.display.set_caption("Casse-Brique")
         self.clock = pygame.time.Clock()
+        
+        # Initialisation des collisions
+        self.collisions = Collisions(self)
 
         # État du jeu
         self.state = GameState.MENU
         self.running = True
 
         # Variables de jeu
-        self.estEntrainDeJouer = False
+        self.isPlaying = False
         self.score = 0
         self.level = 1
         
@@ -126,48 +130,15 @@ class Game:
         Met à jour les éléments du jeu en cours de partie
         """
         keys = pygame.key.get_pressed()
-        self.paddle.update(keys) # Met à jour la position du paddle
-        if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.estEntrainDeJouer:
+        if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.isPlaying:
             self.ball.launchBall()
-            self.estEntrainDeJouer = True
+            self.collisions.checkCollisions()
+            self.isPlaying = True
+        self.paddle.update(keys) # Met à jour la position du paddle
 
         self.ball.update() # Met à jour la position de la balle
-        self.checkCollisions() # Vérifie les collisions
         self.utils.checkVictory() # Vérifie si le joueur a gagné
-
-    def checkCollisions(self):
-        """
-        Vérifie et gère toutes les collisions du jeu
-        @return: True si le jeu continue, False si game over
-        """
-        if self.checkPaddleCollision() or self.checkBrickCollisions():
-            return True
-
-        return self.handleBottomCollision()
-
-    def checkPaddleCollision(self):
-        """
-        Vérifie la collision entre la balle et le paddle
-        @return: True si collision détectée
-        """
-        if self.utils.circleRectCollision(self.paddle.rect):
-            self.ball.dy = -self.ball.dy
-            return True
-        return False
-
-    def checkBrickCollisions(self):
-        """
-        Vérifie la collision entre la balle et les briques
-        @return: True si collision détectée
-        """
-        for brick in self.bricks:
-            if brick.isActive and self.utils.circleRectCollision(brick.rect):
-                brick.hit()
-                self.ball.dy = -self.ball.dy
-                self.score += 10
-                self.hud.updateScore(self.score)
-                return True
-        return False
+        self.collisions.checkCollisions() # Vérifie les collisions
 
     def handleEvents(self):
         """
@@ -208,19 +179,3 @@ class Game:
         elif action == "menu":
             self.gameOverMenu.hide() # Cache l'écran de fin de partie
             self.state = GameState.MENU
-
-    def handleBottomCollision(self):
-        """
-        Gère la collision avec le bord bas de l'écran
-        @return: True si le jeu continue, False si game over
-        """
-        if self.ball.y + 15 >= self.config.screenHeight:
-            if self.gameLife.loseLife():
-                self.hud.updateLives(self.gameLife.getLife())
-                self.utils.resetRound()
-                return True
-            else:
-                self.hud.updateLives(self.gameLife.getLife())
-                self.state = GameState.GAME_OVER
-                return False
-        return True

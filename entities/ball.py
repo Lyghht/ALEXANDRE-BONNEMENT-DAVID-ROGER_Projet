@@ -13,21 +13,27 @@ class Ball:
         self.color = config.colors["ball"]
         self.config = config
         self.resetPlace() #Initialisation de la balle
-    """
+
+    def update(self):
+        """
         Méthode permettant de mettre à jour la position de la balle
         @param self : Objet de la classe
-    """
-    def update(self):
+        """
         #Déplacement de la balle
         self.x += self.dx
         self.y += self.dy
 
         # Collision avec les bords de l'écran
-        if self.x - self.radius <= 0 or self.x + self.radius >= self.config.screenWidth:
+        if self.x - self.radius <= 0:  # Collision avec le bord gauche
+            self.x = self.radius
             self.dx = -self.dx
-        if self.y - self.radius <= self.config.screenHudHeight:
-            self.dy = -self.dy
+        elif self.x + self.radius >= self.config.screenWidth:  # Collision avec le bord droit
+            self.x = self.config.screenWidth - self.radius 
+            self.dx = -self.dx
 
+        if self.y - self.radius <= self.config.screenHudHeight:  # Collision avec le bord supérieur
+            self.y = self.config.screenHudHeight + self.radius
+            self.dy = -self.dy
 
     """
         Permet de dessiner la balle sur l'écran avec la couleur, la position et la taille définie
