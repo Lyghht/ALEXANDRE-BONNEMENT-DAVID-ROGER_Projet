@@ -64,7 +64,7 @@ class Game:
         Liste des briques
     gameLife : lifeManager
         Gestionnaire de vies
-    estEntrainDeJouer : bool
+    isPlaying : bool
         Indique si la balle est en mouvement
     score : int
         Score du joueur
@@ -84,7 +84,7 @@ class Game:
         self.running = True
 
         # Variables de jeu
-        self.estEntrainDeJouer = False
+        self.isPlaying = False
         self.score = 0
         self.level = 1
         
@@ -130,10 +130,11 @@ class Game:
         Met à jour les éléments du jeu en cours de partie
         """
         keys = pygame.key.get_pressed()
-        self.paddle.update(keys) # Met à jour la position du paddle
-        if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.estEntrainDeJouer:
+        if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.isPlaying:
             self.ball.launchBall()
-            self.estEntrainDeJouer = True
+            self.collisions.checkCollisions()
+            self.isPlaying = True
+        self.paddle.update(keys) # Met à jour la position du paddle
 
         self.ball.update() # Met à jour la position de la balle
         self.collisions.checkCollisions() # Vérifie les collisions

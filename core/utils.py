@@ -18,7 +18,7 @@ class Utils:
     def resetRound(self):
         self.game.ball.resetPlace() 
         self.game.paddle.reset()
-        self.game.estEntrainDeJouer = False
+        self.game.isPlaying = False
 
         #Affiche le compte à rebours avant de lancer la balle
         self.showCountdown()
@@ -27,7 +27,7 @@ class Utils:
     # Fonction pour gérer la remise à zéro du jeu
     def resetGame(self):
         #Reset des variables de jeu
-        self.game.estEntrainDeJouer = False
+        self.game.isPlaying = False
         self.game.score = 0
 
         # On remet la balle et le paddle à leur place initiale
