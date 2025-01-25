@@ -7,7 +7,7 @@ class Config:
         self.bgColorMenu = (119, 181, 254) # Bleu clair
         self.fps = 60
         self.paddleSpeed = 8
-        self.bounceAngle = 55
+        self.bounceAngle = 55 # Angle de rebond 90 - bounceAngle = angle de rebond max côté droite
         self.initialLife = 3
         self.ballSpeed = 5
         self.colors = {
