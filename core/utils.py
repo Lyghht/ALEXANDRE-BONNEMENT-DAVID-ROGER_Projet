@@ -71,7 +71,7 @@ class Utils:
             # On remet la balle et le paddle à leur place initiale
             self.game.ball.resetPlace()
             self.game.paddle.reset()
-            self.game.estEntrainDeJouer = False 
+            self.game.isPlaying = False 
 
             self.game.renderer.render()
             self.showCountdown()
