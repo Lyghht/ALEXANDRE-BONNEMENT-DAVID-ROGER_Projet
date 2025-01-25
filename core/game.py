@@ -94,7 +94,7 @@ class Game:
         self.gameOverMenu = GameOverMenu(config)
         self.paddle = Paddle(config)
         self.ball = Ball(config)
-        layout = levelGenerator.generateLevels()
+        layout = levelGenerator.generateLevels(self.level)
         self.bricks = loadLevel(config, layout)
         self.gameLife = lifeManager(config.initialLife)
 
@@ -137,6 +137,7 @@ class Game:
         self.paddle.update(keys) # Met à jour la position du paddle
 
         self.ball.update() # Met à jour la position de la balle
+        self.utils.checkVictory() # Vérifie si le joueur a gagné
         self.collisions.checkCollisions() # Vérifie les collisions
 
     def handleEvents(self):
