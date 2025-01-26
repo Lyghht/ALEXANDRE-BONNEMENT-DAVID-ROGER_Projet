@@ -28,8 +28,8 @@ class Utils:
     def resetGame(self):
         #Reset des variables de jeu
         self.game.isPlaying = False
-        self.game.score = 0
-        self.game.level = 1
+        self.game.score = self.game.config.initialScore
+        self.game.level = self.game.config.initialLevel
 
         # On remet la balle et le paddle à leur place initiale
         self.game.ball.resetPlace()
