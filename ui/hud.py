@@ -16,6 +16,8 @@ class HUD:
         """
         self.config = config
         self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
+        self.heartImage = pygame.transform.scale(pygame.image.load(config.images["heart"]), (20, 20))
+        self.heartBrokenImage = pygame.transform.scale(pygame.image.load(config.images["heartBroken"]), (20, 20))
         self.score = score
         self.level = level
         self.lives = config.initialLife
@@ -38,8 +40,10 @@ class HUD:
         screen.blit(levelText, (self.config.screenWidth // 2 - levelText.get_width() // 2, 10))
 
         # Vies
-        livesText = self.font.render(f"Vies:{self.lives}", True, (255, 255, 255))
-        screen.blit(livesText, (self.config.screenWidth - 10 - livesText.get_width(), 10))
+        for i in range(self.lives, self.config.initialLife):
+            screen.blit(self.heartBrokenImage, (self.config.screenWidth - (self.config.initialLife - i) * 30, 10))
+        for i in range(self.lives):
+            screen.blit(self.heartImage, (self.config.screenWidth - (self.config.initialLife - i) * 30, 10))
 
         # Ligne de séparation
         lineWidth = 5

@@ -9,7 +9,7 @@ class Config:
         self.paddleSpeed = 8
         self.bounceAngle = 55 # Angle de rebond 90 - bounceAngle = angle de rebond max côté droite
         self.initialLife = 3
-        self.initialLevel = 6
+        self.initialLevel = 1
         self.initialScore = 0
         self.ballSpeed = 5
         self.maxBrickLife = 6
@@ -26,4 +26,6 @@ class Config:
             "brick5": "assets/images/brick5.png",
             "brick6": "assets/images/brick6.png",
             "paddle": "assets/images/paddle.png",
+            "heart": "assets/images/heart.png",
+            "heartBroken": "assets/images/heartBroken.png",
         }
