@@ -10,9 +10,6 @@ class Ball:
         self.radius = 10 #Taille de la balle
         self.config = config
 
-        #Couleur de la balle
-        self.color = config.colors["ball"]
-
         #Chargement de l'image de la balle
         self.imageOriginal = pygame.image.load(config.images["ball"])
 
