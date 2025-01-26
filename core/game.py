@@ -132,7 +132,6 @@ class Game:
         keys = pygame.key.get_pressed()
         if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.isPlaying:
             self.isPlaying = True
-            print("Launch ball : " + str(self.isPlaying))
             self.ball.launchBall()
             self.collisions.checkCollisions()
         self.paddle.update(keys) # Met à jour la position du paddle
