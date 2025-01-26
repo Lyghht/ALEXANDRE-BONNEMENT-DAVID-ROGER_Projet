@@ -21,7 +21,7 @@ class Ball:
         # Initialisation pour la rotation
         self.image = self.imageOriginal
         self.angle = 0  # Angle de rotation initial
-        self.rotation_speed = 100  # Vitesse de rotation (en degrés/frame)
+        self.rotation_speed = 5  # Vitesse de rotation (en degrés/frame)
 
         self.resetPlace() #Initialisation de la balle
 
