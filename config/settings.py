@@ -12,7 +12,7 @@ class Config:
         self.initialLevel = 1
         self.initialScore = 0
         self.ballSpeed = 5
-        self.maxBrickLife = 5
+        self.maxBrickLife = 6
         self.sounds = {
             "brickHit": "assets/sounds/brickHit.wav",
             "brickFall": "assets/sounds/brickFall.wav",

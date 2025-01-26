@@ -7,9 +7,9 @@ def generateRandomLayout(rows, cols, difficulty, min_group_size=2, max_group_siz
     if difficulty <= 0.3:
         life_range = [1, 2]  # Niveaux de 1 à 3
     elif 0.3 < difficulty <= 0.5:
-        life_range = [1, 2, 3]  # Niveaux de 4 à 5
+        life_range = [1, 2, 3, 4]  # Niveaux de 4 à 5
     else:
-        life_range = [1, 2, 3, 4, 5]  # Niveaux au-dessus de 7
+        life_range = [1, 2, 3, 4, 5, 6]  # Niveaux au-dessus de 7
 
     # Générer des groupes aléatoires
     for _ in range(int(rows * cols * difficulty)):

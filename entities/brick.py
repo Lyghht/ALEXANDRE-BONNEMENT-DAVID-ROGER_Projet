@@ -56,7 +56,7 @@ class Brick:
         # Chargement des images des briques
         self.brickImages = {
             life: pygame.transform.scale(pygame.image.load(config.images[f"brick{life}"]), (width, height))
-            for life in range(1, self.config.maxBrickLife)
+            for life in range(1, self.config.maxBrickLife + 1)
         }
         self.image = self.brickImages[self.life]
 
