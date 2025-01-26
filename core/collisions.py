@@ -1,4 +1,5 @@
 import pygame
+import time
 import math
 import core.game as gameFile
 
@@ -93,6 +94,7 @@ class Collisions:
         if self.game.ball.y + 15 >= self.game.config.screenHeight:
             if self.game.gameLife.loseLife(): # Si le joueur a encore des vies	
                 self.game.hud.updateLives(self.game.gameLife.getLife())
+                self.game.renderer.render()
                 self.game.utils.resetRound() # Réinitialisation de la balle et du paddle
                 return True
             else: # Si le joueur n'a plus de vie	
