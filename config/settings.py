@@ -12,6 +12,7 @@ class Config:
         self.initialLevel = 1
         self.initialScore = 0
         self.ballSpeed = 5
+        self.maxBrickLife = 5
         self.colors = {
             "brick1": "#F0F465", # Jaune
             "brick2" : "#9CEC5B", # Vert
@@ -27,4 +28,11 @@ class Config:
         }
         self.images = {
             "ball": "assets/images/superball.png",
+            "brick1": "assets/images/brick1.png",
+            "brick2": "assets/images/brick2.png",
+            "brick3": "assets/images/brick3.png",
+            "brick4": "assets/images/brick4.png",
+            "brick5": "assets/images/brick5.png",
+            "brick6": "assets/images/brick6.png",
+            "paddle": "assets/images/paddle.png",
         }
