@@ -9,6 +9,8 @@ class Config:
         self.paddleSpeed = 8
         self.bounceAngle = 55 # Angle de rebond 90 - bounceAngle = angle de rebond max côté droite
         self.initialLife = 3
+        self.initialLevel = 1
+        self.initialScore = 0
         self.ballSpeed = 5
         self.colors = {
             "brick1": "#F0F465", # Jaune
@@ -24,5 +26,5 @@ class Config:
             "brickFall": "assets/sounds/brickFall.wav",
         }
         self.images = {
-            "ball": "assets/images/ball.png",
+            "ball": "assets/images/superball.png",
         }

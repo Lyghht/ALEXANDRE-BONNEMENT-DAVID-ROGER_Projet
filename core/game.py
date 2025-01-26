@@ -85,12 +85,12 @@ class Game:
 
         # Variables de jeu
         self.isPlaying = False
-        self.score = 0
-        self.level = 1
+        self.score = self.config.initialScore
+        self.level = self.config.initialLevel
         
         # Initialisation des éléments du jeu
         self.menu = Menu(config)
-        self.hud = HUD(config, self.score, 1)
+        self.hud = HUD(config, self.score, self.level)
         self.gameOverMenu = GameOverMenu(config)
         self.paddle = Paddle(config)
         self.ball = Ball(config)
@@ -131,9 +131,10 @@ class Game:
         """
         keys = pygame.key.get_pressed()
         if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.isPlaying:
+            self.isPlaying = True
+            print("Launch ball : " + str(self.isPlaying))
             self.ball.launchBall()
             self.collisions.checkCollisions()
-            self.isPlaying = True
         self.paddle.update(keys) # Met à jour la position du paddle
 
         self.ball.update(self.isPlaying) # Met à jour la position de la balle

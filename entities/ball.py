@@ -14,14 +14,17 @@ class Ball:
         self.color = config.colors["ball"]
 
         #Chargement de l'image de la balle
-        self.image_original = pygame.image.load(config.images["ball"])
-        new_size = (self.radius * 2, self.radius * 2)
-        self.image_original = pygame.transform.scale(self.image_original, new_size)
+        self.imageOriginal = pygame.image.load(config.images["ball"])
+
+        # Pré-calcul des images pour 360 angles
+        self.precomputedImages = [
+            pygame.transform.rotate(self.imageOriginal, angle) for angle in range(360)
+        ]
 
         # Initialisation pour la rotation
-        self.image = self.image_original
+        self.image = self.imageOriginal
         self.angle = 0  # Angle de rotation initial
-        self.rotation_speed = 5  # Vitesse de rotation (en degrés/frame)
+        self.rotation_speed = 100  # Vitesse de rotation (en degrés/frame)
 
         self.resetPlace() #Initialisation de la balle
 
@@ -38,12 +41,9 @@ class Ball:
         self.x += self.dx
         self.y += self.dy
 
-        # Rotation de la balle
-        self.angle += self.rotation_speed
-        self.angle %= 360  # Assure que l'angle reste entre 0 et 359
-
-        # Met à jour l'image avec l'angle de rotation
-        self.image = pygame.transform.rotate(self.image_original, self.angle)
+        # Mise à jour de l'angle
+        self.angle = (self.angle + self.rotation_speed) % 360
+        self.image = self.precomputedImages[self.angle]
 
         # Collision avec les bords de l'écran
         if self.x - self.radius <= 0:  # Collision avec le bord gauche
@@ -76,7 +76,7 @@ class Ball:
         self.y = self.config.screenHeight - 50 #Position de la balle initial en y
         self.dx = self.dy = 0 #Vitesse de la balle à 0 en début de jeu
         self.angle = 0 #Angle de rotation de la balle à 0
-        self.image = self.image_original #Image de la balle
+        self.image = self.imageOriginal #Image de la balle
         
 
     """
