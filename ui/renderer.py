@@ -13,14 +13,17 @@ class Renderer:
         """
         Affiche les éléments du jeu
         """
-        if self.game.state == gameFile.GameState.MENU:
-            self.renderMenu()
-        else:
+        if self.game.state == gameFile.GameState.PLAYING:
             self.renderGame()
-
-            # Affiche l'écran de fin de partie si le jeu est terminé par dessus le jeu
-            if self.game.state == gameFile.GameState.GAME_OVER:
-                self.renderGameOver()
+        # Ajout des états particuliers (GAME_OVER ou PAUSED)
+        elif self.game.state == gameFile.GameState.GAME_OVER:
+            self.renderGame() # Affiche les éléments du jeu car GAME_OVER est une modale
+            self.renderGameOver()
+        elif self.game.state == gameFile.GameState.PAUSED:
+            self.renderGame() # Affiche les éléments du jeu car PAUSED est une modale
+            self.renderBreakMenu()
+        elif self.game.state == gameFile.GameState.MENU:
+            self.renderMenu()
 
         pygame.display.update()
 
@@ -51,8 +54,15 @@ class Renderer:
         """
         Affiche l'écran de fin de partie
         """
-        self.game.gameOverMenu.show(self.game.score)  # Prépare l'affichage l'écran de fin de partie avec le score
+        self.game.gameOverMenu.show(self.game.score) # Affiche l'écran de fin de partie avec le score
         self.game.gameOverMenu.draw(self.game.screen)
+    
+    def renderBreakMenu(self):
+        """
+        Affiche le menu de pause
+        """
+        self.game.breakMenu.draw(self.game.screen)
+        self.game.breakMenu.show()
 
 
     def renderCountdownFrame(self, font, remainingTime):
