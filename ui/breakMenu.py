@@ -83,10 +83,10 @@ class BreakMenu:
         ]
         self.soundOn = True
         soundImage = self.soundImages[0]
-        soundImage = pygame.transform.scale(soundImage, (20, 20))  # Taille des images du bouton Son
+        soundImage = pygame.transform.scale(soundImage, (30, 30))  # Taille des images du bouton Son
         buttonRect = pygame.Rect(
             self.modalRect.left + 10,
-            self.modalRect.bottom - 50,
+            self.modalRect.bottom - 60,
             soundImage.get_width() + self.padding[0] * 2,
             soundImage.get_height() + self.padding[1] * 2
         )
@@ -112,19 +112,17 @@ class BreakMenu:
         }
 
         # Bouton Menu
-        menuText = self.font.render("Menu", True, (255, 255, 255))
-        menuRect = menuText.get_rect()
+        homeImage = pygame.image.load("assets/images/home.png")
+        homeImage = pygame.transform.scale(homeImage, (30, 30))  # Taille agrandie du bouton Menu
         buttonRect = pygame.Rect(
-            self.modalRect.right - (10 + menuRect.width + self.padding[0] * 2),  # Position bas-droite de la modale
-            self.modalRect.bottom - 50,
-            menuRect.width + self.padding[0] * 2,
-            menuRect.height + self.padding[1] * 2
+            self.modalRect.right - (homeImage.get_width() + self.padding[0] * 2) - 10,
+            self.modalRect.bottom - 60,
+            homeImage.get_width() + self.padding[0] * 2,
+            homeImage.get_height() + self.padding[1] * 2
         )
-        menuRect.center = buttonRect.center
 
         self.menuButton = {
-            "text": menuText,
-            "textRect": menuRect,
+            "image": homeImage,
             "rect": buttonRect
         }
 
@@ -229,4 +227,4 @@ class BreakMenu:
         """
         self.soundOn = not self.soundOn
         self.soundButton["image"] = self.soundImages[0] if self.soundOn else self.soundImages[1]
-        self.soundButton["image"] = pygame.transform.scale(self.soundButton["image"], (20, 20))
+        self.soundButton["image"] = pygame.transform.scale(self.soundButton["image"], (30, 30))
