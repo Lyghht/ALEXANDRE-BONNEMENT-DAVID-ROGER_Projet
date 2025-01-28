@@ -85,7 +85,7 @@ class BreakMenu:
         soundImage = self.soundImages[0]
         soundImage = pygame.transform.scale(soundImage, (30, 30))  # Taille des images du bouton Son
         buttonRect = pygame.Rect(
-            self.modalRect.left + 10,
+            self.modalRect.left + 10, # Marge de 10 pixels à gauche de la modale
             self.modalRect.bottom - 60,
             soundImage.get_width() + self.padding[0] * 2,
             soundImage.get_height() + self.padding[1] * 2
@@ -115,7 +115,7 @@ class BreakMenu:
         homeImage = pygame.image.load("assets/images/home.png")
         homeImage = pygame.transform.scale(homeImage, (30, 30))  # Taille agrandie du bouton Menu
         buttonRect = pygame.Rect(
-            self.modalRect.right - (homeImage.get_width() + self.padding[0] * 2) - 10,
+            self.modalRect.right - (homeImage.get_width() + self.padding[0] * 2) - 10, # Position à droite de la modale
             self.modalRect.bottom - 60,
             homeImage.get_width() + self.padding[0] * 2,
             homeImage.get_height() + self.padding[1] * 2
@@ -189,6 +189,7 @@ class BreakMenu:
         pygame.draw.rect(screen, (0, 0, 0), button["rect"], border_radius=10)
         pygame.draw.rect(screen, (255, 255, 255), button["rect"], 2, border_radius=10)
 
+        # Positionner le texte au centre du bouton si présent (pas d'image) sinon centrer l'image
         if "image" in button:
             imageRect = button["image"].get_rect(center=button["rect"].center)
             screen.blit(button["image"], imageRect.topleft)
@@ -217,7 +218,7 @@ class BreakMenu:
             elif self.menuButton["rect"].collidepoint(event.pos):
                 return "menu"
             elif self.soundButton["rect"].collidepoint(event.pos):
-                self.toogleSound()
+                self.toogleSound() # Activer ou désactiver le son (visuel)
         
         return None
     
