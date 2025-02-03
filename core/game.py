@@ -1,10 +1,13 @@
 import pygame
+import math
 from entities.paddle import Paddle
 from entities.ball import Ball
 from levels.levelLoader import loadLevel
 from ui.menu import Menu
 from core.lifeManager import lifeManager
+from core.collisions import Collisions
 from ui.gameOver import GameOverMenu
+from ui.hud import HUD
 from enum import Enum
 from core.utils import Utils
 from ui.renderer import Renderer
@@ -61,7 +64,7 @@ class Game:
         Liste des briques
     gameLife : lifeManager
         Gestionnaire de vies
-    estEntrainDeJouer : bool
+    isPlaying : bool
         Indique si la balle est en mouvement
     score : int
         Score du joueur
@@ -74,22 +77,27 @@ class Game:
         self.clock = pygame.time.Clock()
         self.bonuses = []
 
+        # Initialisation des collisions
+        self.collisions = Collisions(self)
+
         # État du jeu
         self.state = GameState.MENU
         self.running = True
 
+        # Variables de jeu
+        self.isPlaying = False
+        self.score = self.config.initialScore
+        self.level = self.config.initialLevel
+
         # Initialisation des éléments du jeu
         self.menu = Menu(config)
+        self.hud = HUD(config, self.score, self.level)
         self.gameOverMenu = GameOverMenu(config)
         self.paddle = Paddle(config)
         self.ball = Ball(config)
-        layout = levelGenerator.generateLevels()
+        layout = levelGenerator.generateLevels(self.level)
         self.bricks = loadLevel(config, layout)
         self.gameLife = lifeManager(config.initialLife)
-
-        # Variables de jeu
-        self.estEntrainDeJouer = False
-        self.score = 0
 
         self.utils = Utils(self)
 
@@ -123,61 +131,15 @@ class Game:
         Met à jour les éléments du jeu en cours de partie
         """
         keys = pygame.key.get_pressed()
-        self.paddle.update(keys) # Met à jour la position du paddle
-        if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.estEntrainDeJouer:
+        if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.isPlaying:
+            self.isPlaying = True
             self.ball.launchBall()
-            self.estEntrainDeJouer = True
+            self.collisions.checkCollisions()
+        self.paddle.update(keys) # Met à jour la position du paddle
 
-        self.ball.update() # Met à jour la position de la balle
-        self.checkCollisions() # Vérifie les collisions
-        self.updateBonuses() # Met à jour les bonus
-
-    def checkCollisions(self):
-        """
-        Vérifie et gère toutes les collisions du jeu
-        @return: True si le jeu continue, False si game over
-        """
-        if self.checkPaddleCollision() or self.checkBrickCollisions() or self.checkBonusCollisions():
-            return True
-
-        return self.handleBottomCollision()
-
-    def checkPaddleCollision(self):
-        """
-        Vérifie la collision entre la balle et le paddle
-        @return: True si collision détectée
-        """
-        if (self.ball.y + self.ball.radius >= self.paddle.y and
-            self.paddle.x <= self.ball.x <= self.paddle.x + self.paddle.width):
-            self.ball.dy = -self.ball.dy
-            return True
-        return False
-
-    def checkBrickCollisions(self):
-        """
-        Vérifie la collision entre la balle et les briques
-        @return: True si collision détectée
-        """
-        for brick in self.bricks:
-            if brick.isActive and brick.rect.collidepoint(self.ball.x, self.ball.y):
-                brick.hit(self.bonuses)
-                self.ball.dy = -self.ball.dy
-                self.score += 10
-                return True
-        return False
-
-    def checkBonusCollisions(self):
-        """
-        Vérifie la collision entre les bonus et le paddle
-        @return: True si collision détectée
-        """
-        for bonus in self.bonuses:
-            if bonus.isActive and (bonus.rect.y + bonus.rect.height >= self.paddle.y and
-                                   self.paddle.x <= bonus.rect.x <= self.paddle.x + self.paddle.width):
-                bonus.apply(self)
-                bonus.isActive = False
-                return True
-        return False
+        self.ball.update(self.isPlaying) # Met à jour la position de la balle
+        self.utils.checkVictory() # Vérifie si le joueur a gagné
+        self.collisions.checkCollisions() # Vérifie les collisions
 
     def handleEvents(self):
         """
@@ -218,27 +180,3 @@ class Game:
         elif action == "menu":
             self.gameOverMenu.hide() # Cache l'écran de fin de partie
             self.state = GameState.MENU
-
-    def handleBottomCollision(self):
-        """
-        Gère la collision avec le bord bas de l'écran
-        @return: True si le jeu continue, False si game over
-        """
-        if self.ball.y >= self.config.screenHeight:
-            if self.gameLife.loseLife():
-                self.utils.resetRound()
-                return True
-            else:
-                self.state = GameState.GAME_OVER
-                return False
-        return True
-
-    def updateBonuses(self):
-        """
-        Met à jour les bonus et vérifie les collisions avec le paddle
-        """
-        for bonus in self.bonuses:
-            if bonus.isActive:
-                bonus.rect.y += self.config.bonusSpeed
-                if bonus.rect.y > self.config.screenHeight:
-                    bonus.isActive = False

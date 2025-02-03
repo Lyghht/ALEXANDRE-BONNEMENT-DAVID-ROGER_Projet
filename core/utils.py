@@ -1,4 +1,5 @@
 import pygame
+import math
 from levels.levelLoader import loadLevel
 from core.lifeManager import lifeManager
 from levels import levelGenerator
@@ -17,7 +18,7 @@ class Utils:
     def resetRound(self):
         self.game.ball.resetPlace() 
         self.game.paddle.reset()
-        self.game.estEntrainDeJouer = False
+        self.game.isPlaying = False
 
         #Affiche le compte à rebours avant de lancer la balle
         self.showCountdown()
@@ -26,19 +27,70 @@ class Utils:
     # Fonction pour gérer la remise à zéro du jeu
     def resetGame(self):
         #Reset des variables de jeu
-        self.game.estEntrainDeJouer = False
-        self.game.score = 0
+        self.game.isPlaying = False
+        self.game.score = self.game.config.initialScore
+        self.game.level = self.game.config.initialLevel
 
         # On remet la balle et le paddle à leur place initiale
         self.game.ball.resetPlace()
         self.game.paddle.reset()
 
         # On recharge les briques
-        layout = levelGenerator.generateLevels()
+        layout = levelGenerator.generateLevels(self.game.level)
         self.game.bricks = loadLevel(self.game.config, layout)
         self.game.gameLife = lifeManager(self.game.config.initialLife)
+        
+        # On recharge l'hud
+        self.game.hud.reset(self.game.score, self.game.level)
+    
+    def checkVictory(self):
+        """
+        Vérifie si le joueur a gagné
+        """
+        count = 0
+        # On compte le nombre de briques restantes
+        for brick in self.game.bricks:
+            if brick.life > 0:
+                count += 1
+        
+        # Si il n'y a plus de briques, on passe au niveau suivant
+        if count == 0:
+            # On incrémente le niveau
+            self.game.level += 1
 
+            # On met à jour l'hud
+            self.game.hud.updateLevel(self.game.level)
+            if self.game.gameLife.getLife() < self.game.config.initialLife:
+                self.game.gameLife.addLife()
+            self.game.hud.updateLives(self.game.gameLife.getLife())
+            
+            # On recharge les briques
+            layout = levelGenerator.generateLevels(self.game.level)
+            self.game.bricks = loadLevel(self.game.config, layout)
 
+            # On remet la balle et le paddle à leur place initiale
+            self.game.isPlaying = False
+            self.game.ball.resetPlace()
+            self.game.paddle.reset()
+
+            self.game.renderer.render()
+            self.showCountdown()
+
+    def circleRectCollision(self, rectangle):
+        """
+        Vérifie la collision entre un cercle et un rectangle
+        @param circle: Cercle
+        @param rectangle: Rectangle
+        @return: True si collision détectée
+        """
+        ball = self.game.ball
+        closestX = max(rectangle.left, min(ball.x, rectangle.right))
+        closestY = max(rectangle.top, min(ball.y, rectangle.bottom))
+        
+        #Permet de calculer la distance
+        distance = math.sqrt((ball.x - closestX) ** 2 + (ball.y - closestY) ** 2)
+        
+        return distance < ball.radius + 2 #On ajoute 2 pour corriger un bug de collision
 
     #Permet d'afficher un compte à rebours
     def showCountdown(self, duration=3):
@@ -46,7 +98,7 @@ class Utils:
         Affiche un décompte avant de relancer le jeu
         @param duration: Durée du décompte en secondes
         """
-        font = pygame.font.Font(None, 100) # Police et taille du texte
+        font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 40)
         startTime = pygame.time.get_ticks()
 
         while True:

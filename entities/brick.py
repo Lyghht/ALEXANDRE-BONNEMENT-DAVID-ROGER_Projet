@@ -30,7 +30,7 @@ class Brick:
         Réduit le nombre de coups restants avant destruction de la brique en fonction des dégâts infligés
     """
 
-    def __init__(self, x, y, width, height, color, life, config):
+    def __init__(self, x, y, width, height, life, config):
         """
         Constructeur de la classe Brick
 
@@ -44,16 +44,27 @@ class Brick:
             largeur de la brique
         height : int
             hauteur de la brique
-        color : tuple
-            couleur de la brique
         life : int
             nombre de coups restants avant destruction
         """
-        self.rect = pygame.Rect(x, y, width, height)
-        self.color = color
+        # Initialisation des attributs
         self.life = life
         self.config = config
         self.isActive = True
+
+        # Création du rectangle représentant la brique
+        self.rect = pygame.Rect(x, y, width, height)
+
+        # Chargement des images des briques
+        self.brickImages = {
+            life: pygame.transform.scale(pygame.image.load(config.images[f"brick{life}"]), (width, height))
+            for life in range(1, self.config.maxBrickLife + 1)
+        }
+        self.image = self.brickImages[self.life]
+
+        # Sons de collision avec une brique
+        self.brickHitSound = pygame.mixer.Sound(self.config.sounds["brickHit"])
+        self.brickFallSound = pygame.mixer.Sound(self.config.sounds["brickFall"])
 
     def draw(self, screen):
         """
@@ -65,8 +76,9 @@ class Brick:
             écran sur lequel dessiner la brique
         """
         if self.isActive:
-            pygame.draw.rect(screen, self.color, self.rect)
-            pygame.draw.rect(screen, (0, 0, 0), self.rect, 1)  # Bordure noire
+            # Dessin de la brique
+            screen.blit(self.image, self.rect)
+
     
     def hit(self, bonuses, damage=1):
         """
@@ -81,10 +93,13 @@ class Brick:
         self.life -= damage
 
         if self.life <= 0:
+            self.brickFallSound.play() # Son de destruction de la brique
             self.isActive = False
             self.generateBonus(bonuses)
         else:
-            self.color = self.config.colors["brick" + str(self.life)]
+            # Mise à jour de l'image de la brique
+            self.image = self.brickImages[self.life]
+            self.brickHitSound.play()
 
     def generateBonus(self, bonuses):
         """
