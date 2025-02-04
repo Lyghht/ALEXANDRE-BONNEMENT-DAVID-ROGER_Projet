@@ -1,5 +1,6 @@
 # entities/paddle.py
 import pygame
+import threading
 
 class Paddle:
     """
@@ -32,3 +33,23 @@ class Paddle:
     def reset(self):
         self.x = (self.config.screenWidth - self.width) // 2
         self.y = self.config.screenHeight - 40
+
+    def doubleBarre(self):
+        def reset_width():
+            pygame.time.wait(15000)
+            self.width = self.width // 1.5
+            self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
+
+        threading.Thread(target=reset_width).start()
+        self.width = self.width * 1.5
+        self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
+
+    def semiBarre(self):
+        def reset_width():
+            pygame.time.wait(15000)
+            self.width = self.width // 0.5
+            self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
+
+        threading.Thread(target=reset_width).start()
+        self.width = self.width * 0.5
+        self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
