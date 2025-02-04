@@ -1,5 +1,6 @@
-import pygame
 import threading
+
+import pygame
 #Classe permettant de générer la balle
 class Ball:
     """
@@ -25,6 +26,7 @@ class Ball:
         self.image = self.imageOriginal
         self.angle = 0  # Angle de rotation initial
         self.rotation_speed = 5  # Vitesse de rotation (en degrés/frame)
+        self.slowBallCounter = 0
 
         self.resetPlace() #Initialisation de la balle
 
@@ -87,6 +89,23 @@ class Ball:
         self.dx = self.config.ballSpeed
         self.dy = -self.config.ballSpeed
 
+    def slowBall(self):
+        if self.slowBallCounter == 0:
+            self.dx /= 2
+            self.dy /= 2
+            self.rotation_speed = 2
+        self.slowBallCounter += 1
+
+        def reset_speed():
+            pygame.time.wait(15000)
+            self.slowBallCounter -= 1
+            if self.slowBallCounter == 0:
+                self.dx *= 2
+                self.dy *= 2
+                self.rotation_speed = 5
+
+        threading.Thread(target=reset_speed).start()
+
     def explosiveBall(self):
         """
         Active le mode explosiveBall pendant 10 secondes
@@ -94,6 +113,6 @@ class Ball:
         def resetExplosive():
             pygame.time.wait(15000)
             self.damage = 1
-        
+
         threading.Thread(target=resetExplosive).start()
         self.damage = 10
