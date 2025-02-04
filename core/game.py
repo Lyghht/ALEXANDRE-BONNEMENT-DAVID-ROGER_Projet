@@ -140,6 +140,7 @@ class Game:
         self.ball.update(self.isPlaying) # Met à jour la position de la balle
         self.utils.checkVictory() # Vérifie si le joueur a gagné
         self.collisions.checkCollisions() # Vérifie les collisions
+        self.updateBonuses()
 
     def handleEvents(self):
         """
@@ -180,3 +181,13 @@ class Game:
         elif action == "menu":
             self.gameOverMenu.hide() # Cache l'écran de fin de partie
             self.state = GameState.MENU
+
+    def updateBonuses(self):
+        """
+        Met à jour les bonus et vérifie les collisions avec le paddle
+        """
+        for bonus in self.bonuses:
+            if bonus.isActive:
+                bonus.rect.y += self.config.bonusSpeed
+                if bonus.rect.y > self.config.screenHeight:
+                    bonus.isActive = False

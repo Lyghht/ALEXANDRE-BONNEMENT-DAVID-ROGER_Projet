@@ -1,7 +1,7 @@
 # entities/brick.py
 import pygame
 import random
-from entities.Bonus import Bonus
+from entities.bonus import Bonus
 
 class Brick:
     """
