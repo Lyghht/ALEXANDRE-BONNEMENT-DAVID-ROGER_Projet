@@ -1,7 +1,6 @@
 import pygame
 import time
 import math
-import core.game as gameFile
 
 """
 Classe qui permet de gérer les collisions
@@ -99,6 +98,7 @@ class Collisions:
                 return True
             else: # Si le joueur n'a plus de vie	
                 self.game.hud.updateLives(self.game.gameLife.getLife())
+                from core import game as gameFile
                 self.game.state = gameFile.GameState.GAME_OVER # Passage à l'état de game over
                 return False
         return True
