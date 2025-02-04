@@ -7,6 +7,7 @@ from ui.menu import Menu
 from core.lifeManager import lifeManager
 from core.collisions import Collisions
 from ui.gameOver import GameOverMenu
+from ui.breakMenu import BreakMenu
 from ui.hud import HUD
 from enum import Enum
 from core.utils import Utils
@@ -23,14 +24,13 @@ class GameState(Enum):
         Menu principal
     PLAYING : int
         En train de jouer
-    PAUSED : int
-        En pause
     GAME_OVER : int
         Écran de fin de partie
     """
     MENU = 1
     PLAYING = 2
-    GAME_OVER = 3
+    PAUSED = 3
+    GAME_OVER = 4
 
 
 # Classe représentant le jeu
@@ -92,6 +92,7 @@ class Game:
         self.menu = Menu(config)
         self.hud = HUD(config, self.score, self.level)
         self.gameOverMenu = GameOverMenu(config)
+        self.breakMenu = BreakMenu(config)
         self.paddle = Paddle(config)
         self.ball = Ball(config)
         layout = levelGenerator.generateLevels(self.level)
@@ -129,13 +130,21 @@ class Game:
         """
         Met à jour les éléments du jeu en cours de partie
         """
+        if self.state == GameState.PAUSED:
+            return  # Ne rien faire si le jeu est en pause
+
         keys = pygame.key.get_pressed()
-        if ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.isPlaying:
+        if self.state == GameState.PLAYING and ((keys[pygame.K_LEFT]) or (keys[pygame.K_RIGHT])) and not self.isPlaying:
             self.isPlaying = True
             self.ball.launchBall()
             self.collisions.checkCollisions()
-        self.paddle.update(keys) # Met à jour la position du paddle
 
+
+        if keys[pygame.K_ESCAPE]:
+            self.state = GameState.PAUSED
+            return
+        
+        self.paddle.update(keys) # Met à jour la position du paddle
         self.ball.update(self.isPlaying) # Met à jour la position de la balle
         self.utils.checkVictory() # Vérifie si le joueur a gagné
         self.collisions.checkCollisions() # Vérifie les collisions
@@ -153,6 +162,8 @@ class Game:
                 self.handleMenuEvents(event)
             elif self.state == GameState.GAME_OVER:
                 self.handleGameOverEvents(event)
+            elif self.state == GameState.PAUSED:
+                self.handleBreakEvents(event)
 
     def handleMenuEvents(self, event):
         """
@@ -178,4 +189,17 @@ class Game:
             self.utils.resetGame()
         elif action == "menu":
             self.gameOverMenu.hide() # Cache l'écran de fin de partie
+            self.state = GameState.MENU
+    
+    def handleBreakEvents(self, event):
+        """
+        Gère les événements de l'écran de pause
+        @param event: Événement Pygame
+        """
+        action = self.breakMenu.handleEvent(event)
+        if action == "play":
+            self.breakMenu.hide() # Cache l'écran de pause
+            self.state = GameState.PLAYING
+        elif action == "menu":
+            self.breakMenu.hide() # Cache l'écran de pause
             self.state = GameState.MENU
