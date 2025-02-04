@@ -1,6 +1,7 @@
 # entities/brick.py
 import pygame
 import random
+import threading
 from entities.bonus import Bonus
 
 class Brick:
@@ -51,6 +52,7 @@ class Brick:
         self.life = life
         self.config = config
         self.isActive = True
+        self.explosive = False
 
         # Création du rectangle représentant la brique
         self.rect = pygame.Rect(x, y, width, height)
@@ -90,7 +92,12 @@ class Brick:
         damage : int
             nombre de coups à retirer à la brique
         """
+
+        if self.config.explosive:
+            damage = 100
+            
         self.life -= damage
+
 
         if self.life <= 0:
             self.brickFallSound.play() # Son de destruction de la brique
@@ -114,3 +121,14 @@ class Brick:
             bonus_type = random.choice(["doubleBar"])
             bonus = Bonus(self.rect.x, self.rect.y, 20, 20, bonus_type)
             bonuses.append(bonus)
+
+    def explosiveBall(self):
+        """
+        Active le mode explosiveBall pendant 10 secondes
+        """
+        def resetExplosive():
+            pygame.time.wait(15000)
+            self.config.explosive = False
+        
+        threading.Thread(target=resetExplosive).start()
+        self.config.explosive = True

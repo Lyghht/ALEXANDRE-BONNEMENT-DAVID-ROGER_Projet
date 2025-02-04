@@ -18,6 +18,6 @@ class Bonus:
             game.addBalls(3)
         elif self.bonus_type == "slow_ball":
             game.ball.slowDown()
-        elif self.bonus_type == "explosive_ball":
-            game.ball.makeExplosive()
+        elif self.bonus_type == "explosiveBall":
+            game.brick.explosiveBall()
         self.isActive = False
