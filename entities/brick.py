@@ -111,6 +111,6 @@ class Brick:
             liste des bonus
         """
         if random.random() < self.config.bonusProbability:
-            bonus_type = random.choice(["doubleBar"])
+            bonus_type = random.choice(["doubleBar", "semiBar", "slowBall"])
             bonus = Bonus(self.rect.x, self.rect.y, 20, 20, bonus_type)
             bonuses.append(bonus)
