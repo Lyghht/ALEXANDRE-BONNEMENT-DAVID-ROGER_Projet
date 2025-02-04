@@ -93,9 +93,9 @@ class Brick:
             nombre de coups à retirer à la brique
         """
 
-        if self.config.explosive:
+        if self.explosive:
             damage = 100
-            
+
         self.life -= damage
 
 
@@ -118,17 +118,8 @@ class Brick:
             liste des bonus
         """
         if random.random() < self.config.bonusProbability:
-            bonus_type = random.choice(["doubleBar"])
+            bonus_type = random.choice(["doubleBar", "semiBar", "explosiveBall"])
             bonus = Bonus(self.rect.x, self.rect.y, 20, 20, bonus_type)
             bonuses.append(bonus)
 
-    def explosiveBall(self):
-        """
-        Active le mode explosiveBall pendant 10 secondes
-        """
-        def resetExplosive():
-            pygame.time.wait(15000)
-            self.config.explosive = False
-        
-        threading.Thread(target=resetExplosive).start()
-        self.config.explosive = True
+    

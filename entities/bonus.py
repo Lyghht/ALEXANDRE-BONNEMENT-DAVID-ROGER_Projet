@@ -14,10 +14,14 @@ class Bonus:
     def apply(self, game):
         if self.bonus_type == "doubleBar":
             game.paddle.doubleBarre()
+        elif self.bonus_type == "semiBar":
+            game.paddle.semiBarre()
+        elif self.bonus_type == "slowBall":
+            game.ball.slowBall()
         elif self.bonus_type == "triple_ball":
             game.addBalls(3)
         elif self.bonus_type == "slow_ball":
             game.ball.slowDown()
         elif self.bonus_type == "explosiveBall":
-            game.brick.explosiveBall()
+            game.ball.explosiveBall()
         self.isActive = False

@@ -1,4 +1,5 @@
 import pygame
+import threading
 #Classe permettant de générer la balle
 class Ball:
     """
@@ -9,6 +10,8 @@ class Ball:
     def __init__(self, config):
         self.radius = 10 #Taille de la balle
         self.config = config
+
+        self.damage = 1 #Dégâts de la balle
 
         #Chargement de l'image de la balle
         self.imageOriginal = pygame.image.load(config.images["ball"])
@@ -83,3 +86,14 @@ class Ball:
     def launchBall(self):
         self.dx = self.config.ballSpeed
         self.dy = -self.config.ballSpeed
+
+    def explosiveBall(self):
+        """
+        Active le mode explosiveBall pendant 10 secondes
+        """
+        def resetExplosive():
+            pygame.time.wait(15000)
+            self.damage = 1
+        
+        threading.Thread(target=resetExplosive).start()
+        self.damage = 10

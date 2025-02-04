@@ -79,7 +79,7 @@ class Collisions:
                 elif ballNextX + self.game.ball.radius >= brickRight and self.game.ball.dx < 0:
                     # Collision par la droite
                     self.game.ball.dx = abs(self.game.ball.dx)
-                brick.hit(self.game.bonuses)
+                brick.hit(self.game.bonuses, self.game.ball.damage)
                 self.game.score += 10 # Ajout de 10 points au score
                 self.game.hud.updateScore(self.game.score)
                 return True
