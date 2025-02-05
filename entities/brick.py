@@ -1,5 +1,8 @@
 # entities/brick.py
 import pygame
+import random
+import threading
+from entities.bonus import Bonus
 
 class Brick:
     """
@@ -49,6 +52,7 @@ class Brick:
         self.life = life
         self.config = config
         self.isActive = True
+        self.explosive = False
 
         # Création du rectangle représentant la brique
         self.rect = pygame.Rect(x, y, width, height)
@@ -76,23 +80,46 @@ class Brick:
         if self.isActive:
             # Dessin de la brique
             screen.blit(self.image, self.rect)
-            
+
     
-    def hit(self, damage=1):
+    def hit(self, bonuses, damage=1):
         """
         Réduit le nombre de coups restants avant destruction de la brique
 
         Paramètres
         ----------
+        bonuses : list
         damage : int
             nombre de coups à retirer à la brique
         """
+
+        if self.explosive:
+            damage = 100
+
         self.life -= damage
+
 
         if self.life <= 0:
             self.brickFallSound.play() # Son de destruction de la brique
             self.isActive = False
+            self.generateBonus(bonuses)
         else:
             # Mise à jour de l'image de la brique
             self.image = self.brickImages[self.life]
             self.brickHitSound.play()
+
+    def generateBonus(self, bonuses):
+        """
+        Génère un bonus aléatoire lorsque la brique est détruite
+
+        Paramètres
+        ----------
+        bonuses : list
+            liste des bonus
+        """
+        if random.random() < self.config.bonusProbability:
+            bonus_type = random.choice(["doubleBar", "semiBar", "explosiveBall", "slowBall"])
+            bonus = Bonus(self.rect.x, self.rect.y, 20, 20, bonus_type)
+            bonuses.append(bonus)
+
+    

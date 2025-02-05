@@ -75,7 +75,8 @@ class Game:
         self.screen = pygame.display.set_mode((config.screenWidth, config.screenHeight))
         pygame.display.set_caption("Casse-Brique")
         self.clock = pygame.time.Clock()
-        
+        self.bonuses = []
+
         # Initialisation des collisions
         self.collisions = Collisions(self)
 
@@ -87,7 +88,7 @@ class Game:
         self.isPlaying = False
         self.score = self.config.initialScore
         self.level = self.config.initialLevel
-        
+
         # Initialisation des éléments du jeu
         self.menu = Menu(config)
         self.hud = HUD(config, self.score, self.level)
@@ -148,6 +149,7 @@ class Game:
         self.ball.update(self.isPlaying) # Met à jour la position de la balle
         self.utils.checkVictory() # Vérifie si le joueur a gagné
         self.collisions.checkCollisions() # Vérifie les collisions
+        self.updateBonuses()
 
     def handleEvents(self):
         """
@@ -190,6 +192,16 @@ class Game:
         elif action == "menu":
             self.gameOverMenu.hide() # Cache l'écran de fin de partie
             self.state = GameState.MENU
+
+    def updateBonuses(self):
+        """
+        Met à jour les bonus et vérifie les collisions avec le paddle
+        """
+        for bonus in self.bonuses:
+            if bonus.isActive:
+                bonus.rect.y += self.config.bonusSpeed
+                if bonus.rect.y > self.config.screenHeight:
+                    bonus.isActive = False
     
     def handleBreakEvents(self, event):
         """

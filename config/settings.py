@@ -29,3 +29,5 @@ class Config:
             "heart": "assets/images/heart.png",
             "heartBroken": "assets/images/heartBroken.png",
         }
+        self.bonusProbability = 0.1
+        self.bonusSpeed = 2

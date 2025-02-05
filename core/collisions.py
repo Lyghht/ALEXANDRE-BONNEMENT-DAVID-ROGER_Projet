@@ -20,7 +20,7 @@ class Collisions:
         Vérifie et gère toutes les collisions du jeu
         @return: True si le jeu continue, False si game over
         """
-        if self.checkPaddleCollision() or self.checkBrickCollisions():
+        if self.checkPaddleCollision() or self.checkBrickCollisions() or self.checkBonusColissions():
             return True
 
         return self.handleBottomCollision()
@@ -84,7 +84,7 @@ class Collisions:
                 elif ballNextX + self.game.ball.radius >= brickRight and self.game.ball.dx < 0:
                     # Collision par la droite
                     self.game.ball.dx = abs(self.game.ball.dx)
-                brick.hit()                
+                brick.hit(self.game.bonuses, self.game.ball.damage)
                 self.game.score += 10 # Ajout de 10 points au score
                 self.game.hud.updateScore(self.game.score)
                 return True
@@ -108,3 +108,16 @@ class Collisions:
                 self.game.state = gameFile.GameState.GAME_OVER # Passage à l'état de game over
                 return False
         return True
+
+    def checkBonusColissions(self):
+        """
+        Vérifie la collision entre les bonus et le paddle
+        @return: True si collision détectée
+        """
+        for bonus in self.game.bonuses:
+            if bonus.isActive and (bonus.rect.y + bonus.rect.height >= self.game.paddle.y and
+                                   self.game.paddle.x <= bonus.rect.x <= self.game.paddle.x + self.game.paddle.width):
+                bonus.apply(self.game)
+                bonus.isActive = False
+                return True
+        return False
