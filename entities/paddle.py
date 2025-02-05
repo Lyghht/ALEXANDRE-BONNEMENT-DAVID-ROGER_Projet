@@ -20,36 +20,60 @@ class Paddle:
         self.image = pygame.transform.scale(pygame.image.load(config.images["paddle"]), (self.width, self.height)) #Chargement de l'image de la barre
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height) #Création du rectangle de la barre
 
-    def update(self, keys): # Deplacement de la barre
+    def update(self, keys):
+        """
+        Déplacement de la barre
+        @param keys : touches du clavier
+        """
         if keys[pygame.K_LEFT] and self.x > 0:
             self.x -= self.speed # Déplacement de la barre à gauche
         if keys[pygame.K_RIGHT] and self.x < self.config.screenWidth - self.width:
             self.x += self.speed # Déplacement de la barre à droite
 
-    def draw(self, screen): # Affichage de la barre
+    def draw(self, screen):
+        """
+        Dessin de la barre
+        @param screen : écran de jeu
+        """
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         screen.blit(self.image, self.rect)
 
     def reset(self):
-        self.x = (self.config.screenWidth - self.width) // 2
-        self.y = self.config.screenHeight - 40
+        """
+        Réinitialisation de la barre
+        """
+        self.x = (self.config.screenWidth - self.width) // 2 #Position de la barre
+        self.y = self.config.screenHeight - 40 #Position de la barre
 
     def doubleBarre(self):
+        """
+        Double la taille de la barre
+        """
+
         def reset_width():
+            """
+            Réinitialisation de la taille de la barre
+            """
             pygame.time.wait(15000)
-            self.width = self.width // 1.5
+            self.width = self.width // 1.5 # Réinitialisation de la taille de la barre
             self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
 
         threading.Thread(target=reset_width).start()
-        self.width = self.width * 1.5
+        self.width = self.width * 1.5 # Doublement de la taille de la barre
         self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
 
     def semiBarre(self):
+        """
+        Réduit la taille de la barre
+        """
         def reset_width():
+            """
+            Réinitialisation de la taille de la barre
+            """
             pygame.time.wait(15000)
-            self.width = self.width // 0.5
+            self.width = self.width // 0.5 # Réinitialisation de la taille de la barre
             self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
 
         threading.Thread(target=reset_width).start()
-        self.width = self.width * 0.5
+        self.width = self.width * 0.5 # Réduction de la taille de la barre
         self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))

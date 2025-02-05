@@ -82,7 +82,7 @@ class Brick:
             screen.blit(self.image, self.rect)
 
     
-    def hit(self, bonuses, damage=1):
+    def hit(self, bonuses=[], damage=1):
         """
         Réduit le nombre de coups restants avant destruction de la brique
 
@@ -94,10 +94,9 @@ class Brick:
         """
 
         if self.explosive:
-            damage = 100
-
-        self.life -= damage
-
+            self.life = 0
+        else:
+            self.life -= damage
 
         if self.life <= 0:
             self.brickFallSound.play() # Son de destruction de la brique
