@@ -20,9 +20,13 @@ def mock_game():
     
     # Simuler la balle avec des attributs nécessaires
     game.ball = Ball(config)
+    game.ball.x = game.ball.x + 5
+    game.ball.y = game.ball.y + 5
 
     # Simuler le paddle
     game.paddle = Paddle(config)
+    game.paddle.x = game.paddle.x + 5
+    game.paddle.y = game.paddle.y + 5
 
     game.hud = MagicMock()
     game.level = config.initialLevel
@@ -64,6 +68,8 @@ def test_reset_game(mock_sound, mock_game):
     Test de la méthode resetGame
     """
     config = Config()
+    mock_game.level += 1 # Permet de tester la réinitialisation du level
+    mock_game.score += 100 # Permet de tester la réinitialisation du score
     utils = Utils(mock_game)
     utils.resetGame()
 
