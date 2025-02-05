@@ -11,15 +11,13 @@ def mock_config():
     """Fixture pour simuler la configuration du jeu."""
     config = MagicMock()
     config.maxBrickLife = 3 
-    config.images = {
-        "brick1": "path/to/brick1.png",
-        "brick2": "path/to/brick2.png",
-        "brick3": "path/to/brick3.png"
-    }
+    config.images = {f"brick{life}": f"../assets/images/brick{life}.png" for life in range(1, config.maxBrickLife + 1)}
     config.sounds = {
-        "brickHit": "path/to/hit_sound.wav",
-        "brickFall": "path/to/fall_sound.wav"
+        "brickHit": "../assets/sounds/brickHit.wav",
+        "brickFall": "../assets/sounds/brickFall.wav"
     }
+
+    config.bonusProbability = 0
 
     # Simuler le chargement des images et sons
     pygame.image.load = MagicMock(side_effect=lambda path: pygame.Surface((50, 20)))
