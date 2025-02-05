@@ -19,8 +19,8 @@ def mock_game():
     game.ball.radius = 10
 
     # Simuler le paddle
-    game.paddle.x = 180
-    game.paddle.width = 40
+    game.paddle.x = 200
+    game.paddle.width = 100
 
     # Simuler les briques
     brick_mock = MagicMock()
@@ -50,6 +50,18 @@ def test_CheckPaddleCollision(mock_game):
     
     assert result is True  # On attend à une collision
     assert mock_game.utils.circleRectCollision.called  # Vérifie que la fonction de collision a été appelée
+
+def test_CheckNoCollision(mock_game):
+    """Test sans collision"""
+    collisions = Collisions(mock_game)
+    
+    mock_game.ball.x = 500  # Position éloignée de tout objet
+    mock_game.utils.circleRectCollision = MagicMock(return_value=False)
+    
+    result = collisions.checkPaddleCollision()
+    
+    assert result is False  # Vérifier qu'aucune collision n'est détectée
+    assert mock_game.utils.circleRectCollision.called
 
 def test_CheckBrickCollision(mock_game):
     """Test de la collision avec une brique."""
@@ -121,3 +133,14 @@ def test_HandleBottomCollisionGameOver(mock_game):
     assert result is False 
     from core.game import GameState
     assert mock_game.state == GameState.GAME_OVER
+
+def test_HandleBottomCollisionContinue(mock_game):
+    """Test que le jeu continue si le joueur a encore des vies."""
+    mock_game.ball.y = 590
+    mock_game.gameLife.loseLife.return_value = True
+
+    collisions = Collisions(mock_game)
+    result = collisions.handleBottomCollision()
+
+    assert result is True 
+    assert mock_game.utils.resetRound.called
