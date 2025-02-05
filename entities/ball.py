@@ -59,21 +59,22 @@ class Ball:
             self.y = self.config.screenHudHeight + self.radius
             self.dy = -self.dy
 
-    """
+
+    def draw(self, screen):
+        """
         Permet de dessiner la balle sur l'écran avec la couleur, la position et la taille définie
         @param self : Objet de la classe
         @param screen : Ecran du jeu
-    """
-    def draw(self, screen):
+        """
         # Calculer la position pour centrer l'image
         rotated_rect = self.image.get_rect(center=(self.x, self.y))
         screen.blit(self.image, rotated_rect.topleft)
 
-    """
+    def resetPlace(self):
+        """
         Permet de réinitialiser la position de la balle
         @param self : Objet de la classe
-    """
-    def resetPlace(self):
+        """
         self.x = self.config.screenWidth // 2 #Position de la balle initial en x
         self.y = self.config.screenHeight - 50 #Position de la balle initial en y
         self.dx = self.dy = 0 #Vitesse de la balle à 0 en début de jeu
@@ -81,22 +82,30 @@ class Ball:
         self.image = self.imageOriginal #Image de la balle
         
 
-    """
+
+    def launchBall(self):
+        """
         Permet de lancer balle
         @param self : Objet de la classe
-    """
-    def launchBall(self):
+        """
         self.dx = self.config.ballSpeed
         self.dy = -self.config.ballSpeed
 
     def slowBall(self):
-        if self.slowBallCounter == 0:
+        """
+        Active le mode slowBall pendant 10 secondes
+        """
+        if self.slowBallCounter == 0: # Si la balle n'est pas déjà en mode slow
+            # Division de la vitesse de la balle par 2
             self.dx /= 2
             self.dy /= 2
             self.rotation_speed = 2
         self.slowBallCounter += 1
 
         def reset_speed():
+            """
+            Réinitialisation de la vitesse de la balle
+            """
             pygame.time.wait(15000)
             self.slowBallCounter -= 1
             if self.slowBallCounter == 0:
