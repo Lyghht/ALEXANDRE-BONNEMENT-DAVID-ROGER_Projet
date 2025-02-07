@@ -3,14 +3,17 @@ import threading
 import pygame
 #Classe permettant de générer la balle
 class Ball:
-    """
-    Permet de construire une balle
-    @param self : Objet de la classe
-    @param config : Configuration du jeux
-    """
+
     def __init__(self, config):
+        """
+        Permet de construire une balle
+        @param self : Objet de la classe
+        @param config : Configuration du jeux
+        """
         self.radius = 10 #Taille de la balle
         self.config = config
+
+        self.speedBallCounter = 0
 
         self.damage = 1 #Dégâts de la balle
 
@@ -62,18 +65,19 @@ class Ball:
 
     def draw(self, screen):
         """
-        Permet de dessiner la balle sur l'écran avec la couleur, la position et la taille définie
-        @param self : Objet de la classe
-        @param screen : Ecran du jeu
+            Permet de dessiner la balle sur l'écran avec la couleur, la position et la taille définie
+            @param self : Objet de la classe
+            @param screen : Ecran du jeu
         """
         # Calculer la position pour centrer l'image
         rotated_rect = self.image.get_rect(center=(self.x, self.y))
         screen.blit(self.image, rotated_rect.topleft)
 
+
     def resetPlace(self):
         """
-        Permet de réinitialiser la position de la balle
-        @param self : Objet de la classe
+            Permet de réinitialiser la position de la balle
+            @param self : Objet de la classe
         """
         self.x = self.config.screenWidth // 2 #Position de la balle initial en x
         self.y = self.config.screenHeight - 50 #Position de la balle initial en y
@@ -82,23 +86,22 @@ class Ball:
         self.image = self.imageOriginal #Image de la balle
         
 
-
     def launchBall(self):
         """
-        Permet de lancer balle
-        @param self : Objet de la classe
+            Permet de lancer la balle
+        :return:
         """
         self.dx = self.config.ballSpeed
         self.dy = -self.config.ballSpeed
 
     def slowBall(self):
         """
-        Active le mode slowBall pendant 10 secondes
+            Active le mode slowBall (balle ralentit) pendant 15 secondes
+            @param self : Objet de la classe
         """
-        if self.slowBallCounter == 0: # Si la balle n'est pas déjà en mode slow
-            # Division de la vitesse de la balle par 2
-            self.dx /= 2
-            self.dy /= 2
+        if self.slowBallCounter == 0:
+            self.dx /= 1.2
+            self.dy /= 1.2
             self.rotation_speed = 2
         self.slowBallCounter += 1
 
@@ -109,8 +112,8 @@ class Ball:
             pygame.time.wait(15000)
             self.slowBallCounter -= 1
             if self.slowBallCounter == 0:
-                self.dx *= 2
-                self.dy *= 2
+                self.dx *= 1.2
+                self.dy *= 1.2
                 self.rotation_speed = 5
 
         threading.Thread(target=reset_speed).start()
@@ -125,3 +128,25 @@ class Ball:
     def resetExplosive(self):
         pygame.time.wait(15000)
         self.damage = 1
+
+    def speedBall(self):
+        """
+        Active le mode speedBall pendant 10 secondes.
+        L'effet est cumulatif, mais si un bonus expire,
+        la vitesse diminue progressivement.
+        """
+        if self.speedBallCounter == 0:
+            self.dx *= 1.2
+            self.dy *= 1.2
+            self.rotation_speed = 10
+        self.slowBallCounter += 1
+
+        def reset_speed():
+            pygame.time.wait(15000)
+            self.slowBallCounter -= 1
+            if self.slowBallCounter == 0:
+                self.dx /= 1.2
+                self.dy /= 1.2
+                self.rotation_speed = 5
+
+        threading.Thread(target=reset_speed).start()

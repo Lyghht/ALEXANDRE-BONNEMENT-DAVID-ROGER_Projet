@@ -115,7 +115,7 @@ class Brick:
         # Génération aléatoire d'un bonus avec une probabilité donnée
         if random.random() < self.config.bonusProbability:
             #On choisit un type de bonus aléatoire
-            bonus_type = random.choice(["doubleBar", "semiBar", "explosiveBall", "slowBall", "reversedControls"])
+            bonus_type = random.choice(["doubleBar", "semiBar", "explosiveBall", "slowBall", "reversedControls", "speedBall"])
             bonus = Bonus(self.rect.x, self.rect.y, 20, 20, bonus_type) # Création du bonus
             bonuses.append(bonus)
 
