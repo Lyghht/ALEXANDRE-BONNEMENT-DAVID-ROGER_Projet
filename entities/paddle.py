@@ -15,6 +15,7 @@ class Paddle:
         self.height = 20 #Hauteur de la barre
         self.speed = config.paddleSpeed #Vitesse de la barre
         self.config = config #Configuration du jeu
+        self.reversed_controls = False
         self.reset()
 
         self.image = pygame.transform.scale(pygame.image.load(config.images["paddle"]), (self.width, self.height)) #Chargement de l'image de la barre
@@ -25,10 +26,17 @@ class Paddle:
         Déplacement de la barre
         @param keys : touches du clavier
         """
-        if keys[pygame.K_LEFT] and self.x > 0:
-            self.x -= self.speed # Déplacement de la barre à gauche
-        if keys[pygame.K_RIGHT] and self.x < self.config.screenWidth - self.width:
-            self.x += self.speed # Déplacement de la barre à droite
+        if self.reversed_controls: #Si les contrôles sont inversés	
+            if keys[pygame.K_LEFT] and self.x < self.config.screenWidth - self.width:
+                self.x += self.speed
+            if keys[pygame.K_RIGHT] and self.x > 0:
+                self.x -= self.speed
+        else: #Sinon contrôles normaux
+            if keys[pygame.K_LEFT] and self.x > 0:
+                self.x -= self.speed # Déplacement de la barre à gauche
+            if keys[pygame.K_RIGHT] and self.x < self.config.screenWidth - self.width:
+                self.x += self.speed # Déplacement de la barre à droite
+            
 
     def draw(self, screen):
         """
@@ -50,30 +58,37 @@ class Paddle:
         Double la taille de la barre
         """
 
-        def reset_width():
-            """
-            Réinitialisation de la taille de la barre
-            """
-            pygame.time.wait(15000)
-            self.width = self.width // 1.5 # Réinitialisation de la taille de la barre
-            self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
-
-        threading.Thread(target=reset_width).start()
-        self.width = self.width * 1.5 # Doublement de la taille de la barre
+        threading.Thread(target=self.resetWidth, args=(2/3,)).start()
+        self.width = self.width * 1.5 # Augmentation de la taille de la barre
         self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
+
 
     def semiBarre(self):
         """
         Réduit la taille de la barre
         """
-        def reset_width():
-            """
-            Réinitialisation de la taille de la barre
-            """
-            pygame.time.wait(15000)
-            self.width = self.width // 0.5 # Réinitialisation de la taille de la barre
-            self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
-
-        threading.Thread(target=reset_width).start()
+        threading.Thread(target=self.resetWidth, args=(2,)).start()
         self.width = self.width * 0.5 # Réduction de la taille de la barre
         self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
+
+    def resetWidth(self, ratio):
+        """
+        Réinitialisation de la taille de la barre
+        """
+        pygame.time.wait(15000)
+        self.width = self.width * ratio # Réinitialisation de la taille de la barre
+        self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
+
+    def reversedControls(self):
+        """
+        Inversion des contrôles
+        """
+        threading.Thread(target=self.resetControls).start()
+        self.reversed_controls = True 
+
+    def resetControls(self):
+        """
+        Réinitialisation des contrôles
+        """
+        pygame.time.wait(15000)
+        self.reversed_controls = False

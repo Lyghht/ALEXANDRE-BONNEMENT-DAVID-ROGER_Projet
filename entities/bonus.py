@@ -33,6 +33,8 @@ class Bonus:
             game.paddle.semiBarre()
         elif self.bonus_type == "slowBall":
             game.ball.slowBall()
+        elif self.bonus_type == "reversedControls":
+            game.paddle.reversedControls()
         elif self.bonus_type == "triple_ball":
             game.addBalls(3)
         elif self.bonus_type == "slow_ball":
