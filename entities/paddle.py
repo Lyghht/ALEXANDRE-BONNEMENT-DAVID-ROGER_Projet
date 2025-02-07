@@ -15,7 +15,7 @@ class Paddle:
         self.height = 20 #Hauteur de la barre
         self.speed = config.paddleSpeed #Vitesse de la barre
         self.config = config #Configuration du jeu
-        self.reversed_controls = False
+        self.areControlsReversed = False
         self.reset()
 
         self.image = pygame.transform.scale(pygame.image.load(config.images["paddle"]), (self.width, self.height)) #Chargement de l'image de la barre
@@ -26,7 +26,7 @@ class Paddle:
         Déplacement de la barre
         @param keys : touches du clavier
         """
-        if self.reversed_controls: #Si les contrôles sont inversés	
+        if self.areControlsReversed: #Si les contrôles sont inversés	
             if keys[pygame.K_LEFT] and self.x < self.config.screenWidth - self.width:
                 self.x += self.speed
             if keys[pygame.K_RIGHT] and self.x > 0:
@@ -84,11 +84,11 @@ class Paddle:
         Inversion des contrôles
         """
         threading.Thread(target=self.resetControls).start()
-        self.reversed_controls = True 
+        self.areControlsReversed = True 
 
     def resetControls(self):
         """
         Réinitialisation des contrôles
         """
         pygame.time.wait(15000)
-        self.reversed_controls = False
+        self.areControlsReversed = False
