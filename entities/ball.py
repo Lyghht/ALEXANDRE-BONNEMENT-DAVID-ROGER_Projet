@@ -119,9 +119,9 @@ class Ball:
         """
         Active le mode explosiveBall pendant 10 secondes
         """
-        def resetExplosive():
-            pygame.time.wait(15000)
-            self.damage = 1
-
-        threading.Thread(target=resetExplosive).start()
+        threading.Thread(target=self.resetExplosive).start()
         self.damage = 10
+
+    def resetExplosive(self):
+        pygame.time.wait(15000)
+        self.damage = 1
