@@ -18,17 +18,29 @@ ALEXANDRE-BONNEMENT-DAVID-ROGER_PROJET/
 ├── core/
 │   ├── game.py           # Classe principale pour gérer la boucle de jeu et les événements
 │   ├── utils.py          # Fonctions utilitaires
+│   ├── collisions.py     # Classe pour la gestion des collisions
+│   ├── lifeManager.py    # Classe pour la gestion des vies
 ├── entities/
+│   ├── bonus.py          # Classe pour les bonus
 │   ├── paddle.py         # Classe pour le paddle
 │   ├── ball.py           # Classe pour la balle
 │   └── brick.py          # Classe pour les briques
 ├── levels/
-│   ├── levelX.json      # Définition des briques pour un niveau
-│   └── levelLoader.py   # Chargeur des fichiers de niveau
+│   ├── levelGenerator.py # générateur de niveau
+│   └── levelLoader.py    # Chargeur de niveau
+├── testsUnitaires/
+│   ├── test_Ball.py      # tests unitaires pour la classe Ball
+│   ├── test_Brick.py     # tests unitaires pour la classe Brick
+│   ├── test_Collisions.py # tests unitaires pour la classe Collisions
+│   ├── test_LifeManager.py # tests unitaires pour la classe LifeManager
+│   ├── test_Paddle.py    # tests unitaires pour la classe Paddle
+│   ├── test_Utils.py     # tests unitaires pour la classe Utils
 ├── ui/
-│   ├── menu.py           # Gestion du menu principal (start, settings, quit)
+│   ├── renderer.py       # Gère le render des différents éléments du jeu
+│   ├── menu.py           # Menu principal (start, quit)
 │   ├── hud.py            # Interface utilisateur en jeu (score, vies restantes)
-│   └── gameOver.py      # Affichage de l'écran de fin de partie
+│   ├── breakMenu.py      # Affichage de l'écran de pause
+│   └── gameOver.py       # Affichage de l'écran de fin de partie
 └── README.md             # Documentation pour le projet
 ```
 
