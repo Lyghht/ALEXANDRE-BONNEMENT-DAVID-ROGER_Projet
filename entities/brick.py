@@ -82,7 +82,7 @@ class Brick:
             screen.blit(self.image, self.rect)
 
     
-    def hit(self, bonuses, damage=1):
+    def hit(self, bonuses=[], damage=1):
         """
         Réduit le nombre de coups restants avant destruction de la brique
 
