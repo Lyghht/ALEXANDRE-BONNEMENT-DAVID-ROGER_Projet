@@ -23,6 +23,14 @@ class Bonus:
         if self.isActive:
             screen.blit(self.image, self.rect.topleft) #Dessin du bonus
 
+    def undraw(self, screen):
+        """
+        Permet de supprimer le bonus de l'écran
+        """
+        if not self.isActive:
+            screen.fill((0, 0, 0), self.rect)
+
+
     def apply(self, game):
         """
         Applique le bonus au jeu

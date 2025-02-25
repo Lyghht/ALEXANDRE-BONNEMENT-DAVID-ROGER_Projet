@@ -19,6 +19,8 @@ class Utils:
         self.game.ball.resetPlace() 
         self.game.paddle.reset()
         self.game.isPlaying = False
+        self.unuseAllBonuses()
+
 
         #Affiche le compte à rebours avant de lancer la balle
         self.showCountdown()
@@ -31,7 +33,9 @@ class Utils:
         self.game.score = self.game.config.initialScore
         self.game.level = self.game.config.initialLevel
 
+
         # On remet la balle et le paddle à leur place initiale
+        self.unuseAllBonuses()
         self.game.ball.resetPlace()
         self.game.paddle.reset()
 
@@ -55,6 +59,7 @@ class Utils:
         
         # Si il n'y a plus de briques, on passe au niveau suivant
         if count == 0:
+            self.unuseAllBonuses()
             # On incrémente le niveau
             self.game.level += 1
 
@@ -118,3 +123,9 @@ class Utils:
 
             # Mise à jour de l'affichage
             self.game.renderer.renderCountdownFrame(font, remainingTime)
+
+    def unuseAllBonuses(self):
+        for bonus in self.game.bonuses:
+            bonus.isActive = False
+            bonus.undraw(self.game.screen)
+        self.game.bonuses = []
