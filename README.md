@@ -1,9 +1,9 @@
 ### Projects2024
-Projets des étudiants en BUT Info Alternant 2024-2025
+Projets des étudiants en BUT Info Alternant 2024-2025  
 Groupe : ALEXANDRE Clément - BONNEMENT léo - DAVID Émile - ROGER Simon
 
 # Projet de Développement d'un casse brique
-Langage de programmation : python
+Langage de programmation : python  
 Dépendances : pygame, pytest, unittest
 
 ## Comment lancer le jeu :
