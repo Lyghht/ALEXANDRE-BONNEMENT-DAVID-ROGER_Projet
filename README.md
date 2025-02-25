@@ -1,8 +1,19 @@
 ### Projects2024
 Projets des étudiants en BUT Info Alternant 2024-2025
+Groupe : ALEXANDRE Clément - BONNEMENT léo - DAVID Émile - ROGER Simon
 
 # Projet de Développement d'un casse brique
 Langage de programmation : python
+Dépendances : pygame, pytest, unittest
+
+## Comment lancer le jeu :
+Pour lancer le jeu, il faudra exécuter le main qui permet de lancer les différentes classes du projet et ne pas oublier d'installer les dépendances nécessaires (tels que pygame, etc.).
+
+## Comment lancer les tests :
+Pour exécuter les tests, il faut exécuter ```pytest``` avec l'option ```-v``` (plus de détails) ou simplement ```pytest```, ce qui est possible à la racine du projet.
+
+## Installer les dépendances :
+Pour installer les dépendances, il suffit d'exécuter ```pip install -r requirements.txt```
 
 ## Arborescence du projet :
 
@@ -42,6 +53,7 @@ ALEXANDRE-BONNEMENT-DAVID-ROGER_PROJET/
 │   ├── breakMenu.py      # Affichage de l'écran de pause
 │   └── gameOver.py       # Affichage de l'écran de fin de partie
 └── README.md             # Documentation pour le projet
+└── requirement.txt       # Fichier des dépendances python
 ```
 
 ## Tâches à Réaliser :
@@ -63,3 +75,4 @@ ALEXANDRE-BONNEMENT-DAVID-ROGER_PROJET/
 Faites en un fork et poussez régulièrement le code source, la documentation, le plan de test et les tests unitaires. N’hésitez pas à faire de multiples Pull-Request.
 #### 7.	Revue de Code :
 -	Effectuez une revue de code en utilisant les pull-request sur GitHub pour examiner le code de vos collègues et fournir des commentaires constructifs.
+-	lien : https://github.com/Nattends/projet-snake/pull/3
