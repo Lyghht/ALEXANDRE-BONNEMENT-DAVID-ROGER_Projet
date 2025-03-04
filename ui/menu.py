@@ -29,12 +29,12 @@ class Menu:
         """
         self.config = config
         self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
-        self.font_play = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 30)
-        self.font_title = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 40)
+        self.fontPlay = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 30)
+        self.fontTitle = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 40)
         self.padding = (20, 20)  # (padding_x, padding_y) pour le texte des boutons
 
         # Titre
-        self.title = self.font_title.render("Casse Brique", True, (255, 255, 255))
+        self.title = self.fontTitle.render("Casse Brique", True, (255, 255, 255))
         self.title_rect = self.title.get_rect(center=(config.screenWidth // 2, 100))
 
         # Création des boutons avec padding
@@ -58,7 +58,7 @@ class Menu:
         if is_quit:
             rendered_text = self.font.render(text, True, (100, 100, 100))
         else:
-            rendered_text = self.font_play.render(text, True, (100, 100, 100))
+            rendered_text = self.fontPlay.render(text, True, (100, 100, 100))
         text_rect = rendered_text.get_rect()
         
         # Création du rectangle du bouton avec padding
@@ -132,9 +132,9 @@ class Menu:
                 return "quit"
         if event.type == pygame.MOUSEMOTION:
             if self.play_rect.collidepoint(event.pos):
-                self.play = self.font_play.render("Jouer", True, (0, 0, 0))
+                self.play = self.fontPlay.render("Jouer", True, (0, 0, 0))
             else:
-                self.play = self.font_play.render("Jouer", True, (100, 100, 100))
+                self.play = self.fontPlay.render("Jouer", True, (100, 100, 100))
             if self.quit_rect.collidepoint(event.pos):
                 self.quit = self.font.render("Quitter", True, (0, 0, 0))
             else:
