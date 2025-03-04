@@ -16,6 +16,8 @@ class Utils:
 
     # Fonction pour gérer le reset de la balle et du paddle en cas de mort
     def resetRound(self):
+        self.game.ball.cancelAllBonuses()
+        self.game.paddle.cancelAllBonuses()
         self.game.ball.resetPlace() 
         self.game.paddle.reset()
         self.game.isPlaying = False
@@ -28,6 +30,10 @@ class Utils:
 
     # Fonction pour gérer la remise à zéro du jeu
     def resetGame(self):
+        #Reset des bonus
+        self.game.ball.cancelAllBonuses()
+        self.game.paddle.cancelAllBonuses()
+
         #Reset des variables de jeu
         self.game.isPlaying = False
         self.game.score = self.game.config.initialScore

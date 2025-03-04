@@ -28,10 +28,18 @@ class Ball:
         # Initialisation pour la rotation
         self.image = self.imageOriginal
         self.angle = 0  # Angle de rotation initial
-        self.rotation_speed = 5  # Vitesse de rotation (en degrés/frame)
+        self.rotationSpeed = 5  # Vitesse de rotation (en degrés/frame)
         self.slowBallCounter = 0
 
         self.resetPlace() #Initialisation de la balle
+
+        self.slowBallCounter = 0
+        self.speedBallCounter = 0
+        
+        self.slowBallStopEvent = threading.Event()  # Flag pour stopper les ralentissements
+        self.slowBallThreads = []
+        self.speedBallThreads = []
+        self.explosiveBallThreads = []
 
     def update(self, isPlaying):
         """
@@ -47,7 +55,7 @@ class Ball:
         self.y += self.dy
 
         # Mise à jour de l'angle
-        self.angle = (self.angle + self.rotation_speed) % 360
+        self.angle = (self.angle + self.rotationSpeed) % 360
         self.image = self.precomputedImages[self.angle]
 
         # Collision avec les bords de l'écran
@@ -96,57 +104,112 @@ class Ball:
 
     def slowBall(self):
         """
-            Active le mode slowBall (balle ralentit) pendant 15 secondes
-            @param self : Objet de la classe
+        Active un ralentissement de la balle pendant 15 secondes.
+        Chaque appel ajoute un ralentissement supplémentaire (effet cumulatif).
         """
-        if self.slowBallCounter == 0:
-            self.dx /= 1.2
-            self.dy /= 1.2
-            self.rotation_speed = 2
         self.slowBallCounter += 1
 
-        def reset_speed():
-            """
-            Réinitialisation de la vitesse de la balle
-            """
-            pygame.time.wait(15000)
-            self.slowBallCounter -= 1
-            if self.slowBallCounter == 0:
-                self.dx *= 1.2
-                self.dy *= 1.2
-                self.rotation_speed = 5
+        # Appliquer le ralentissement immédiatement
+        slowFactor = 1 / 1.2  # Facteur de ralentissement
+        self.dx *= slowFactor
+        self.dy *= slowFactor
+        self.rotationSpeed = max(1, self.rotationSpeed - 1)
 
-        threading.Thread(target=reset_speed).start()
+        # Créer un thread qui restaurera progressivement la vitesse après 15s
+        stopEvent = threading.Event()
+        self.slowBallThreads.append(stopEvent)
+        threading.Thread(target=self.resetSlow, args=(stopEvent,)).start()
 
-    def explosiveBall(self):
+    def resetSlow(self, stopEvent):
         """
-        Active le mode explosiveBall pendant 10 secondes
+        Attend 15 secondes avant d'annuler un ralentissement spécifique.
         """
-        threading.Thread(target=self.resetExplosive).start()
-        self.damage = 10
+        for _ in range(150):  # Attendre 15 secondes en vérifiant toutes les 100ms
+            if stopEvent.is_set():  # Si on annule tout, on arrête immédiatement
+                return
+            pygame.time.wait(100)
 
-    def resetExplosive(self):
-        pygame.time.wait(15000)
-        self.damage = 1
+        # Un ralentissement se termine
+        self.slowBallCounter -= 1
+        if self.slowBallCounter >= 0:  # S'il reste des ralentissements, ajuster la vitesse
+            restoreFactor = 1.2  # Facteur pour retrouver la vitesse normale
+            self.dx *= restoreFactor
+            self.dy *= restoreFactor
+            self.rotationSpeed = min(5, self.rotationSpeed + 1)
+    
+    def cancelSlowBall(self):
+        """
+        Annule immédiatement tous les ralentissements en cours.
+        """
+        print("Cancel slow ball")
+        self.slowBallCounter = 0
+        for stopEvent in self.slowBallThreads:
+            stopEvent.set()  # Arrêter tous les threads actifs
+        self.slowBallThreads.clear()
+
+        # Rétablir la vitesse initiale immédiatement
+        self.dx = self.config.ballSpeed
+        self.dy = -self.config.ballSpeed
+        self.rotationSpeed = 5
 
     def speedBall(self):
-        """
-        Active le mode speedBall pendant 10 secondes.
-        L'effet est cumulatif, mais si un bonus expire,
-        la vitesse diminue progressivement.
-        """
-        if self.speedBallCounter == 0:
-            self.dx *= 1.2
-            self.dy *= 1.2
-            self.rotation_speed = 10
-        self.slowBallCounter += 1
+        """Active un boost de vitesse cumulatif pendant 10 secondes."""
+        self.speedBallCounter += 1
+        speedFactor = 1.2
+        self.dx *= speedFactor
+        self.dy *= speedFactor
+        self.rotationSpeed = min(15, self.rotationSpeed + 2)
 
-        def reset_speed():
-            pygame.time.wait(15000)
-            self.slowBallCounter -= 1
-            if self.slowBallCounter == 0:
-                self.dx /= 1.2
-                self.dy /= 1.2
-                self.rotation_speed = 5
+        stopEvent = threading.Event()
+        self.speedBallThreads.append(stopEvent)
+        threading.Thread(target=self.resetSpeed, args=(stopEvent,)).start()
 
-        threading.Thread(target=reset_speed).start()
+    def resetSpeed(self, stopEvent):
+        """Attend 10s avant d'annuler un boost de vitesse spécifique."""
+        for _ in range(100):
+            if stopEvent.is_set():
+                return
+            pygame.time.wait(100)
+
+        self.speedBallCounter -= 1
+        if self.speedBallCounter >= 0:
+            restoreFactor = 1 / 1.2
+            self.dx *= restoreFactor
+            self.dy *= restoreFactor
+            self.rotationSpeed = max(5, self.rotationSpeed - 2)
+
+    def explosiveBall(self):
+        """Active un boost de dégâts pendant 10 secondes."""
+        self.damage += 10
+
+        stopEvent = threading.Event()
+        self.explosiveBallThreads.append(stopEvent)
+        threading.Thread(target=self.resetExplosive, args=(stopEvent,)).start()
+
+    def resetExplosive(self, stopEvent):
+        """Attend 10s avant de réinitialiser les dégâts."""
+        for _ in range(100):
+            if stopEvent.is_set():
+                return
+            pygame.time.wait(100)
+
+        self.damage = max(1, self.damage - 10)
+
+    def cancelAllBonuses(self):
+        """Annule immédiatement tous les effets actifs."""
+        self.slowBallCounter = 0
+        self.speedBallCounter = 0
+        self.damage = 1
+
+        # Stopper tous les threads actifs
+        for stopEvent in self.slowBallThreads + self.speedBallThreads + self.explosiveBallThreads:
+            stopEvent.set()
+        
+        self.slowBallThreads.clear()
+        self.speedBallThreads.clear()
+        self.explosiveBallThreads.clear()
+
+        # Réinitialiser la vitesse
+        self.dx = self.config.ballSpeed
+        self.dy = -self.config.ballSpeed
+        self.rotationSpeed = 5

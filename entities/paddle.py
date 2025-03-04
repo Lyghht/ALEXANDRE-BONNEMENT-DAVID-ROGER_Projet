@@ -1,94 +1,107 @@
-# entities/paddle.py
 import pygame
 import threading
 
 class Paddle:
-    """
-    
-    Classe représentant la barre de jeu
-    @param config: Configuration du jeu
-    @param self : Barre de jeu
+    def __init__(self, config):
+        self.width = 100
+        self.height = 20
+        self.speed = config.paddleSpeed
+        self.config = config
 
-    """
-    def __init__(self, config): #Initialisation de la barre
-        self.width = 100 #Largeur de la barre
-        self.height = 20 #Hauteur de la barre
-        self.speed = config.paddleSpeed #Vitesse de la barre
-        self.config = config #Configuration du jeu
-        self.areControlsReversed = False
+        self.reversedControlsCounter = 0
+        self.sizeMultiplier = 1  # Garde une trace de la taille courante
+
         self.reset()
 
-        self.image = pygame.transform.scale(pygame.image.load(config.images["paddle"]), (self.width, self.height)) #Chargement de l'image de la barre
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height) #Création du rectangle de la barre
+        self.image = pygame.transform.scale(pygame.image.load(config.images["paddle"]), (self.width, self.height))
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+
+        self.reversedControlThreads = []
+        self.sizeChangeThreads = []
 
     def update(self, keys):
-        """
-        Déplacement de la barre
-        @param keys : touches du clavier
-        """
-        if self.areControlsReversed: #Si les contrôles sont inversés	
+        """Déplacement de la barre avec gestion des contrôles inversés."""
+        if self.reversedControlsCounter > 0:
             if keys[pygame.K_LEFT] and self.x < self.config.screenWidth - self.width:
                 self.x += self.speed
             if keys[pygame.K_RIGHT] and self.x > 0:
                 self.x -= self.speed
-        else: #Sinon contrôles normaux
+        else:
             if keys[pygame.K_LEFT] and self.x > 0:
-                self.x -= self.speed # Déplacement de la barre à gauche
+                self.x -= self.speed
             if keys[pygame.K_RIGHT] and self.x < self.config.screenWidth - self.width:
-                self.x += self.speed # Déplacement de la barre à droite
-            
+                self.x += self.speed
 
     def draw(self, screen):
-        """
-        Dessin de la barre
-        @param screen : écran de jeu
-        """
+        """Dessine la barre sur l'écran."""
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         screen.blit(self.image, self.rect)
 
     def reset(self):
-        """
-        Réinitialisation de la barre
-        """
-        self.x = (self.config.screenWidth - self.width) // 2 #Position de la barre
-        self.y = self.config.screenHeight - 40 #Position de la barre
+        """Réinitialisation de la barre."""
+        self.x = (self.config.screenWidth - self.width) // 2
+        self.y = self.config.screenHeight - 40
 
     def doubleBarre(self):
-        """
-        Double la taille de la barre
-        """
+        """Double la taille de la barre pendant 15 secondes (effet cumulatif)."""
+        self.sizeMultiplier *= 1.5
+        self.updateSize()
 
-        threading.Thread(target=self.resetWidth, args=(2/3,)).start()
-        self.width = self.width * 1.5 # Augmentation de la taille de la barre
-        self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
-
+        stopEvent = threading.Event()
+        self.sizeChangeThreads.append(stopEvent)
+        threading.Thread(target=self.resetSize, args=(stopEvent, 1/1.5)).start()
 
     def semiBarre(self):
-        """
-        Réduit la taille de la barre
-        """
-        threading.Thread(target=self.resetWidth, args=(2,)).start()
-        self.width = self.width * 0.5 # Réduction de la taille de la barre
+        """Réduit la taille de la barre pendant 15 secondes (effet cumulatif)."""
+        self.sizeMultiplier *= 0.5
+        self.updateSize()
+
+        stopEvent = threading.Event()
+        self.sizeChangeThreads.append(stopEvent)
+        threading.Thread(target=self.resetSize, args=(stopEvent, 2)).start()
+
+    def updateSize(self):
+        """Met à jour la taille de la barre en fonction du multiplicateur."""
+        self.width = int(100 * self.sizeMultiplier)
         self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
 
-    def resetWidth(self, ratio):
-        """
-        Réinitialisation de la taille de la barre
-        """
-        pygame.time.wait(15000)
-        self.width = self.width * ratio # Réinitialisation de la taille de la barre
-        self.image = pygame.transform.scale(pygame.image.load(self.config.images["paddle"]), (self.width, self.height))
+    def resetSize(self, stopEvent, ratio):
+        """Réinitialise la taille après expiration du bonus."""
+        for _ in range(150):
+            if stopEvent.is_set():
+                return
+            pygame.time.wait(100)
+
+        self.sizeMultiplier *= ratio
+        self.updateSize()
 
     def reversedControls(self):
-        """
-        Inversion des contrôles
-        """
-        threading.Thread(target=self.resetControls).start()
-        self.areControlsReversed = True 
+        """Inverse les contrôles de la barre pendant 15 secondes."""
+        self.reversedControlsCounter += 1
 
-    def resetControls(self):
-        """
-        Réinitialisation des contrôles
-        """
-        pygame.time.wait(15000)
-        self.areControlsReversed = False
+        stopEvent = threading.Event()
+        self.reversedControlThreads.append(stopEvent)
+        threading.Thread(target=self.resetControls, args=(stopEvent,)).start()
+
+    def resetControls(self, stopEvent):
+        """Réinitialise les contrôles après expiration du bonus."""
+        for _ in range(100):
+            if stopEvent.is_set():
+                return
+            pygame.time.wait(100)
+
+        self.reversedControlsCounter -= 1
+
+    def cancelAllBonuses(self):
+        """Annule immédiatement tous les effets actifs."""
+        self.reversedControlsCounter = 0
+        self.sizeMultiplier = 1
+
+        # Stopper tous les threads actifs
+        for stopEvent in self.reversedControlThreads + self.sizeChangeThreads:
+            stopEvent.set()
+
+        self.reversedControlThreads.clear()
+        self.sizeChangeThreads.clear()
+
+        self.updateSize()
