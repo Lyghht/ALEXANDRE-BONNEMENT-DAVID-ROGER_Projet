@@ -12,15 +12,15 @@ class GameOverMenu:
         Police de caractères pour le texte
     fontTitle : pygame.font.Font
         Police de caractères pour le titre
-    modal_rect : pygame.Rect
+    modalRect : pygame.Rect
         Rectangle de la modale
     title : pygame.Surface
         Surface du titre "Game Over"
-    score_text : pygame.Surface
+    scoreText : pygame.Surface
         Surface du texte du score
-    retry_button : dict
+    retryButton : dict
         Informations du bouton "Rejouer"
-    menu_button : dict
+    menuButton : dict
         Informations du bouton "Menu"
     visible : bool
         État de visibilité de la modale
@@ -44,68 +44,68 @@ class GameOverMenu:
         self.fontTitle = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 30)
         
         # Dimensions de la modale
-        modal_width = config.screenWidth // 2
-        modal_height = config.screenHeight // 2
+        modalWidth = config.screenWidth // 2
+        modalHeight = config.screenHeight // 2
         self.padding = (20, 10)
         
         # Rectangle de la modale
-        self.modal_rect = pygame.Rect(
-            (config.screenWidth - modal_width) // 2,
-            (config.screenHeight - modal_height) // 2,
-            modal_width,
-            modal_height
+        self.modalRect = pygame.Rect(
+            (config.screenWidth - modalWidth) // 2,
+            (config.screenHeight - modalHeight) // 2,
+            modalWidth,
+            modalHeight
         )
         
         # Titre
         self.title = self.fontTitle.render("Game Over", True, (255, 0, 0))
-        self.title_rect = self.title.get_rect(
-            centerx=self.modal_rect.centerx,
-            top=self.modal_rect.top + 20
+        self.titleRect = self.title.get_rect(
+            centerx=self.modalRect.centerx,
+            top=self.modalRect.top + 20
         )
         
         # Boutons
-        button_y = self.modal_rect.centery + 50
-        self.create_buttons(button_y)
+        buttonY = self.modalRect.centery + 50
+        self.create_buttons(buttonY)
 
-    def create_buttons(self, base_y):
+    def create_buttons(self, baseY):
         """
         Crée les boutons de la modale
 
         Paramètres
         ----------
-        base_y : int
+        baseY : int
             Position verticale de base pour les boutons
         """
         # Bouton Rejouer
-        retry_text = self.font.render("Rejouer", True, (100, 100, 100))
-        retry_rect = retry_text.get_rect()
-        button_rect = pygame.Rect(0, 0,
-                                retry_rect.width + self.padding[0] * 2,
-                                retry_rect.height + self.padding[1] * 2)
-        button_rect.centerx = self.modal_rect.centerx
-        button_rect.centery = base_y
-        retry_rect.center = button_rect.center
+        retryText = self.font.render("Rejouer", True, (100, 100, 100))
+        retryRect = retryText.get_rect()
+        buttonRect = pygame.Rect(0, 0,
+                                retryRect.width + self.padding[0] * 2,
+                                retryRect.height + self.padding[1] * 2)
+        buttonRect.centerx = self.modalRect.centerx
+        buttonRect.centery = baseY
+        retryRect.center = buttonRect.center
         
-        self.retry_button = {
-            "text": retry_text,
-            "text_rect": retry_rect,
-            "rect": button_rect
+        self.retryButton = {
+            "text": retryText,
+            "textRect": retryRect,
+            "rect": buttonRect
         }
         
         # Bouton Menu
-        menu_text = self.font.render("Menu", True, (100, 100, 100))
-        menu_rect = menu_text.get_rect()
-        button_rect = pygame.Rect(0, 0,
-                                menu_rect.width + self.padding[0] * 2,
-                                menu_rect.height + self.padding[1] * 2)
-        button_rect.centerx = self.modal_rect.centerx
-        button_rect.centery = base_y + 50
-        menu_rect.center = button_rect.center
+        menuText = self.font.render("Menu", True, (100, 100, 100))
+        menuRect = menuText.get_rect()
+        buttonRect = pygame.Rect(0, 0,
+                                menuRect.width + self.padding[0] * 2,
+                                menuRect.height + self.padding[1] * 2)
+        buttonRect.centerx = self.modalRect.centerx
+        buttonRect.centery = baseY + 50
+        menuRect.center = buttonRect.center
         
-        self.menu_button = {
-            "text": menu_text,
-            "text_rect": menu_rect,
-            "rect": button_rect
+        self.menuButton = {
+            "text": menuText,
+            "textRect": menuRect,
+            "rect": buttonRect
         }
 
     def show(self, score):
@@ -119,10 +119,10 @@ class GameOverMenu:
         """
         self.visible = True
         self.score = score
-        self.score_text = self.font.render(f"Score:{score}", True, (255, 255, 255))
-        self.score_rect = self.score_text.get_rect(
-            centerx=self.modal_rect.centerx,
-            centery=self.modal_rect.centery - 20
+        self.scoreText = self.font.render(f"Score:{score}", True, (255, 255, 255))
+        self.scoreRect = self.scoreText.get_rect(
+            centerx=self.modalRect.centerx,
+            centery=self.modalRect.centery - 20
         )
 
     def hide(self):
@@ -150,18 +150,18 @@ class GameOverMenu:
         screen.blit(s, (0, 0))
         
         # Fond de la modale
-        pygame.draw.rect(screen, (50, 50, 50), self.modal_rect, border_radius=15)
-        pygame.draw.rect(screen, (255, 255, 255), self.modal_rect, 2, border_radius=15)
+        pygame.draw.rect(screen, (50, 50, 50), self.modalRect, border_radius=15)
+        pygame.draw.rect(screen, (255, 255, 255), self.modalRect, 2, border_radius=15)
         
         # Titre
-        screen.blit(self.title, self.title_rect)
+        screen.blit(self.title, self.titleRect)
         
         # Score
-        screen.blit(self.score_text, self.score_rect)
+        screen.blit(self.scoreText, self.scoreRect)
         
         # Boutons
-        self.drawButton(screen, self.retry_button)
-        self.drawButton(screen, self.menu_button)
+        self.drawButton(screen, self.retryButton)
+        self.drawButton(screen, self.menuButton)
 
     def drawButton(self, screen, button):
         """
@@ -176,7 +176,7 @@ class GameOverMenu:
         """
         pygame.draw.rect(screen, (255, 255, 255), button["rect"], border_radius=10)
         pygame.draw.rect(screen, (0, 0, 0), button["rect"], 2, border_radius=10)
-        screen.blit(button["text"], button["text_rect"])
+        screen.blit(button["text"], button["textRect"])
 
     def handleEvent(self, event):
         """
@@ -195,18 +195,18 @@ class GameOverMenu:
             None sinon
         """
         if self.visible and event.type == pygame.MOUSEBUTTONDOWN:  
-            if self.retry_button["rect"].collidepoint(event.pos):
+            if self.retryButton["rect"].collidepoint(event.pos):
                 return "retry"
-            elif self.menu_button["rect"].collidepoint(event.pos):
+            elif self.menuButton["rect"].collidepoint(event.pos):
                 return "menu"
         if self.visible and event.type == pygame.MOUSEMOTION:
-            if self.retry_button["rect"].collidepoint(event.pos):
-                self.retry_button["text"] = self.font.render("Rejouer", True, (0, 0, 0))
+            if self.retryButton["rect"].collidepoint(event.pos):
+                self.retryButton["text"] = self.font.render("Rejouer", True, (0, 0, 0))
             else:
-                self.retry_button["text"] = self.font.render("Rejouer", True, (100, 100, 100))
-            if self.menu_button["rect"].collidepoint(event.pos):
-                self.menu_button["text"] = self.font.render("Menu", True, (0, 0, 0))
+                self.retryButton["text"] = self.font.render("Rejouer", True, (100, 100, 100))
+            if self.menuButton["rect"].collidepoint(event.pos):
+                self.menuButton["text"] = self.font.render("Menu", True, (0, 0, 0))
             else:
-                self.menu_button["text"] = self.font.render("Menu", True, (100, 100, 100))
+                self.menuButton["text"] = self.font.render("Menu", True, (100, 100, 100))
         
         return None
