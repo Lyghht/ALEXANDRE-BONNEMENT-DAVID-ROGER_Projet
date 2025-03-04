@@ -16,9 +16,13 @@ class Utils:
 
     # Fonction pour gérer le reset de la balle et du paddle en cas de mort
     def resetRound(self):
+        self.game.ball.cancelAllBonuses()
+        self.game.paddle.cancelAllBonuses()
         self.game.ball.resetPlace() 
         self.game.paddle.reset()
         self.game.isPlaying = False
+        self.unuseAllBonuses()
+
 
         #Affiche le compte à rebours avant de lancer la balle
         self.showCountdown()
@@ -26,12 +30,18 @@ class Utils:
 
     # Fonction pour gérer la remise à zéro du jeu
     def resetGame(self):
+        #Reset des bonus
+        self.game.ball.cancelAllBonuses()
+        self.game.paddle.cancelAllBonuses()
+
         #Reset des variables de jeu
         self.game.isPlaying = False
         self.game.score = self.game.config.initialScore
         self.game.level = self.game.config.initialLevel
 
+
         # On remet la balle et le paddle à leur place initiale
+        self.unuseAllBonuses()
         self.game.ball.resetPlace()
         self.game.paddle.reset()
 
@@ -55,6 +65,7 @@ class Utils:
         
         # Si il n'y a plus de briques, on passe au niveau suivant
         if count == 0:
+            self.unuseAllBonuses()
             # On incrémente le niveau
             self.game.level += 1
 
@@ -118,3 +129,9 @@ class Utils:
 
             # Mise à jour de l'affichage
             self.game.renderer.renderCountdownFrame(font, remainingTime)
+
+    def unuseAllBonuses(self):
+        for bonus in self.game.bonuses:
+            bonus.isActive = False
+            bonus.undraw(self.game.screen)
+        self.game.bonuses = []

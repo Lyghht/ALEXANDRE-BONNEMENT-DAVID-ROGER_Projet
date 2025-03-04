@@ -52,7 +52,6 @@ class Brick:
         self.life = life
         self.config = config
         self.isActive = True
-        self.explosive = False
 
         # Création du rectangle représentant la brique
         self.rect = pygame.Rect(x, y, width, height)
@@ -92,12 +91,8 @@ class Brick:
         damage : int
             nombre de coups à retirer à la brique
         """
-
-        if self.explosive:
-            damage = 100
-
+        # Si la brique est explosive, elle est détruite immédiatement
         self.life -= damage
-
 
         if self.life <= 0:
             self.brickFallSound.play() # Son de destruction de la brique
@@ -117,9 +112,11 @@ class Brick:
         bonuses : list
             liste des bonus
         """
+        # Génération aléatoire d'un bonus avec une probabilité donnée
         if random.random() < self.config.bonusProbability:
-            bonus_type = random.choice(["doubleBar", "semiBar", "explosiveBall", "slowBall"])
-            bonus = Bonus(self.rect.x, self.rect.y, 20, 20, bonus_type)
+            #On choisit un type de bonus aléatoire
+            bonus_type = random.choice(["doubleBar", "semiBar", "explosiveBall", "slowBall", "reversedControls", "speedBall"])
+            bonus = Bonus(self.rect.x, self.rect.y, 20, 20, bonus_type) # Création du bonus
             bonuses.append(bonus)
 
     

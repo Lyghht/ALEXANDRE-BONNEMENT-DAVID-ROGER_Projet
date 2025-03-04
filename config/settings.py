@@ -6,7 +6,7 @@ class Config:
         self.bgColor = (0, 0, 0)  # Noir
         self.bgColorMenu = (119, 181, 254) # Bleu clair
         self.fps = 60
-        self.paddleSpeed = 8
+        self.paddleSpeed = 12
         self.bounceAngle = 55 # Angle de rebond 90 - bounceAngle = angle de rebond max côté droite
         self.initialLife = 3
         self.initialLevel = 1
@@ -29,5 +29,5 @@ class Config:
             "heart": "assets/images/heart.png",
             "heartBroken": "assets/images/heartBroken.png",
         }
-        self.bonusProbability = 0.1
+        self.bonusProbability = 0.2
         self.bonusSpeed = 2
