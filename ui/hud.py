@@ -1,4 +1,5 @@
 import pygame
+from core.path import resourcePath
 
 class HUD:
     """
@@ -15,7 +16,7 @@ class HUD:
             Configuration du jeu
         """
         self.config = config
-        self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
+        self.font = pygame.font.Font(resourcePath("assets/fonts/PressStart2P-Regular.ttf"), 20)
         self.heartImage = pygame.transform.scale(pygame.image.load(config.images["heart"]), (20, 20))
         self.heartBrokenImage = pygame.transform.scale(pygame.image.load(config.images["heartBroken"]), (20, 20))
         self.score = score

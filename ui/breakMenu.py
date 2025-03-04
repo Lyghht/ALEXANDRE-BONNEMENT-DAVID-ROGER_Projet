@@ -1,4 +1,5 @@
 import pygame
+from core.path import resourcePath
 
 class BreakMenu:
     """
@@ -46,8 +47,8 @@ class BreakMenu:
         self.visible = False
         
         # Polices
-        self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
-        self.fontTitle = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 30)
+        self.font = pygame.font.Font(resourcePath("assets/fonts/PressStart2P-Regular.ttf"), 20)
+        self.fontTitle = pygame.font.Font(resourcePath("assets/fonts/PressStart2P-Regular.ttf"), 30)
         
         # Dimensions de la modale
         modalWidth = config.screenWidth // 2
@@ -78,8 +79,8 @@ class BreakMenu:
         """
         # Bouton Son
         self.soundImages = [
-            pygame.image.load("assets/images/soundOn.png"),
-            pygame.image.load("assets/images/soundOff.png")
+            pygame.image.load(resourcePath("assets/images/soundOn.png")),
+            pygame.image.load(resourcePath("assets/images/soundOff.png"))
         ]
         self.soundOn = True
         soundImage = self.soundImages[0]
@@ -97,7 +98,7 @@ class BreakMenu:
         }
 
         # Bouton Rejouer
-        playImage = pygame.image.load("assets/images/play.png")
+        playImage = pygame.image.load(resourcePath("assets/images/play.png"))
         playImage = pygame.transform.scale(playImage, (30, 30))  # Taille agrandie du bouton Play
         buttonRect = pygame.Rect(
             0, 0,
@@ -112,7 +113,7 @@ class BreakMenu:
         }
 
         # Bouton Menu
-        homeImage = pygame.image.load("assets/images/home.png")
+        homeImage = pygame.image.load(resourcePath("assets/images/home.png"))
         homeImage = pygame.transform.scale(homeImage, (30, 30))  # Taille agrandie du bouton Menu
         buttonRect = pygame.Rect(
             self.modalRect.right - (homeImage.get_width() + self.padding[0] * 2) - 10, # Position à droite de la modale

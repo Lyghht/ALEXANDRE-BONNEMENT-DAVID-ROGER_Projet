@@ -1,4 +1,5 @@
 import pygame
+from core.path import resourcePath
 
 class Bonus:
     def __init__(self, x, y, width, height, bonus_type):
@@ -14,7 +15,7 @@ class Bonus:
         self.rect = pygame.Rect(x, y, width, height)
         self.bonus_type = bonus_type
         self.isActive = True
-        self.image = pygame.image.load(f'assets/bonuses/{bonus_type}.png') #Chargement de l'image du bonus
+        self.image = pygame.image.load(resourcePath(f'assets/bonuses/{bonus_type}.png')) #Chargement de l'image du bonus
 
     def draw(self, screen):
         """

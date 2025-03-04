@@ -3,6 +3,7 @@ import math
 from levels.levelLoader import loadLevel
 from core.lifeManager import lifeManager
 from levels import levelGenerator
+from core.path import resourcePath
 
 """
 Classe utilitaire pour le jeu
@@ -109,7 +110,7 @@ class Utils:
         Affiche un décompte avant de relancer le jeu
         @param duration: Durée du décompte en secondes
         """
-        font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 40)
+        font = pygame.font.Font(resourcePath("assets/fonts/PressStart2P-Regular.ttf"), 40)
         startTime = pygame.time.get_ticks()
 
         while True:

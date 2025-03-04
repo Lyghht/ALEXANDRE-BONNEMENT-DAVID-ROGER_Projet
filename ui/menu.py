@@ -1,4 +1,5 @@
 import pygame
+from core.path import resourcePath
 
 class Menu:
     """
@@ -28,9 +29,9 @@ class Menu:
         Constructeur de la classe Menu
         """
         self.config = config
-        self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
-        self.font_play = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 30)
-        self.font_title = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 40)
+        self.font = pygame.font.Font(resourcePath("assets/fonts/PressStart2P-Regular.ttf"), 20)
+        self.font_play = pygame.font.Font(resourcePath("assets/fonts/PressStart2P-Regular.ttf"), 30)
+        self.font_title = pygame.font.Font(resourcePath("assets/fonts/PressStart2P-Regular.ttf"), 40)
         self.padding = (20, 20)  # (padding_x, padding_y) pour le texte des boutons
 
         # Titre

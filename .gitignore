@@ -127,9 +127,9 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
+.DS_Store
 .eggs/
 lib/
 lib64/

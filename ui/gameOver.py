@@ -1,4 +1,5 @@
 import pygame
+from core.path import resourcePath
 
 class GameOverMenu:
     """
@@ -40,8 +41,8 @@ class GameOverMenu:
         self.score = 0
         
         # Polices
-        self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
-        self.font_title = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 30)
+        self.font = pygame.font.Font(resourcePath("assets/fonts/PressStart2P-Regular.ttf"), 20)
+        self.font_title = pygame.font.Font(resourcePath("assets/fonts/PressStart2P-Regular.ttf"), 30)
         
         # Dimensions de la modale
         modal_width = config.screenWidth // 2
