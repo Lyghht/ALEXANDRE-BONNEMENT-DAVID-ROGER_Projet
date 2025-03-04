@@ -10,7 +10,7 @@ class GameOverMenu:
         Configuration du jeu
     font : pygame.font.Font
         Police de caractères pour le texte
-    font_title : pygame.font.Font
+    fontTitle : pygame.font.Font
         Police de caractères pour le titre
     modal_rect : pygame.Rect
         Rectangle de la modale
@@ -41,7 +41,7 @@ class GameOverMenu:
         
         # Polices
         self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 20)
-        self.font_title = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 30)
+        self.fontTitle = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 30)
         
         # Dimensions de la modale
         modal_width = config.screenWidth // 2
@@ -57,7 +57,7 @@ class GameOverMenu:
         )
         
         # Titre
-        self.title = self.font_title.render("Game Over", True, (255, 0, 0))
+        self.title = self.fontTitle.render("Game Over", True, (255, 0, 0))
         self.title_rect = self.title.get_rect(
             centerx=self.modal_rect.centerx,
             top=self.modal_rect.top + 20
