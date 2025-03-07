@@ -6,8 +6,16 @@ Groupe : ALEXANDRE Clément - BONNEMENT léo - DAVID Émile - ROGER Simon
 Langage de programmation : python  
 Dépendances : pygame, pytest, unittest
 
-## Comment lancer le jeu :
-Pour lancer le jeu, il faudra exécuter le main qui permet de lancer les différentes classes du projet et ne pas oublier d'installer les dépendances nécessaires (tels que pygame, etc.).
+## Comment lancer le jeu (2 manières) :
+
+### 1. Exécuter via Python :
+- Pour lancer le jeu, exécutez le fichier `main.py` avec Python. Assurez-vous d'avoir installé les dépendances nécessaires avant de lancer le script (voir Installer les dépendances).
+- Pour ce faire, ouvrez votre terminal ou invite de commandes et exécutez la commande suivante :
+  ```bash
+  python main.py
+
+### 2. Exécuter vie .exe :
+- Pour lancer le jeux avec un .exe, exécuter le fichier `Poke-Brique.exe`. Qui se trouve dans le /dist 
 
 ## Comment lancer les tests :
 Pour exécuter les tests, il faut exécuter ```pytest``` avec l'option ```-v``` (plus de détails) ou simplement ```pytest```, ce qui est possible à la racine du projet.
